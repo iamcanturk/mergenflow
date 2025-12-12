@@ -15,6 +15,7 @@ import {
 import { UserNav } from './user-nav'
 import { NotificationDropdown } from '@/components/notifications/notification-dropdown'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { LanguageToggle } from '@/components/language-toggle'
 
 const breadcrumbLabels: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -66,6 +67,7 @@ export function AppHeader() {
         </Breadcrumb>
       </div>
       <div className="flex items-center gap-2">
+        <LanguageToggle />
         <ThemeToggle />
         <NotificationDropdown />
         <UserNav />

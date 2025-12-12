@@ -208,6 +208,16 @@ export function AppSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+        <div className="mt-4 text-center">
+          <a 
+            href="https://iamcanturk.dev" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground hover:text-primary transition-colors"
+          >
+            Made with ❤️ by Yusuf Can TÜRK
+          </a>
+        </div>
       </SidebarFooter>
     </Sidebar>
   )

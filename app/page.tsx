@@ -223,9 +223,22 @@ export default function LandingPage() {
               </div>
               <span className="text-xl font-bold">MergenFlow</span>
             </div>
-            <p className="text-sm text-muted-foreground">
-              © 2025 MergenFlow. Tüm hakları saklıdır.
-            </p>
+            <div className="flex flex-col items-center gap-2 sm:items-end">
+              <p className="text-sm text-muted-foreground">
+                © 2025 MergenFlow. Tüm hakları saklıdır.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Made with ❤️ by{' '}
+                <a 
+                  href="https://iamcanturk.dev" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
+                  Yusuf Can TÜRK
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </footer>

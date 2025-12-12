@@ -1,0 +1,281 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "loading": "Loading...",
+    "search": "Search",
+    "filter": "Filter",
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "clear": "Clear",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "none": "None",
+    "noData": "No data available",
+    "error": "An error occurred",
+    "success": "Operation successful",
+    "required": "This field is required"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "fullName": "Full Name",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signInWith": "Sign in with {provider}",
+    "loginSuccess": "Welcome back!",
+    "registerSuccess": "Account created successfully!",
+    "invalidCredentials": "Invalid email or password"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "clients": "Clients",
+    "projects": "Projects",
+    "transactions": "Transactions",
+    "assets": "Assets",
+    "projections": "Projections",
+    "settings": "Settings",
+    "admin": "Admin Panel",
+    "profile": "Profile"
+  },
+  "landing": {
+    "hero": {
+      "title": "Take Control of Your Freelance Career",
+      "subtitle": "The all-in-one platform for managing your projects, clients, and finances. Make smarter decisions with powerful analytics.",
+      "cta": "Get Started Free",
+      "login": "Login"
+    },
+    "features": {
+      "title": "Everything You Need",
+      "subtitle": "Powerful tools designed specifically for freelancers",
+      "projectManagement": {
+        "title": "Project Management",
+        "description": "Track your projects from proposal to completion with our intuitive Kanban board."
+      },
+      "financialTracking": {
+        "title": "Financial Tracking",
+        "description": "Monitor your income, expenses, and assets in one place with real-time insights."
+      },
+      "clientCRM": {
+        "title": "Client CRM",
+        "description": "Manage your client relationships with detailed profiles and project history."
+      },
+      "projections": {
+        "title": "36-Month Projections",
+        "description": "See your financial future with intelligent forecasting and trend analysis."
+      },
+      "recurring": {
+        "title": "Recurring Items",
+        "description": "Track subscriptions, loans, and regular payments with automatic calculations."
+      },
+      "notifications": {
+        "title": "Smart Notifications",
+        "description": "Never miss a deadline with customizable reminders and alerts."
+      }
+    },
+    "benefits": {
+      "title": "Why Freelancers Choose Us",
+      "free": "100% Free & Open Source",
+      "secure": "Your Data Stays Yours",
+      "fast": "Lightning Fast Performance"
+    },
+    "cta": {
+      "title": "Ready to Transform Your Freelance Business?",
+      "subtitle": "Join thousands of freelancers who are taking control of their careers.",
+      "button": "Start Free Today"
+    },
+    "footer": {
+      "rights": "All rights reserved.",
+      "madeWith": "Made with ❤️ by"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {name}!",
+    "overview": "Overview",
+    "recentProjects": "Recent Projects",
+    "upcomingTasks": "Upcoming Tasks",
+    "financialSummary": "Financial Summary",
+    "quickActions": "Quick Actions",
+    "stats": {
+      "totalIncome": "Total Income",
+      "totalExpenses": "Total Expenses",
+      "netBalance": "Net Balance",
+      "activeProjects": "Active Projects",
+      "pendingTasks": "Pending Tasks",
+      "totalClients": "Total Clients"
+    }
+  },
+  "clients": {
+    "title": "Clients",
+    "addClient": "Add Client",
+    "editClient": "Edit Client",
+    "deleteClient": "Delete Client",
+    "companyName": "Company Name",
+    "contactPerson": "Contact Person",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "notes": "Notes",
+    "projects": "Projects",
+    "noClients": "No clients yet. Add your first client!",
+    "deleteConfirm": "Are you sure you want to delete this client?",
+    "searchPlaceholder": "Search clients..."
+  },
+  "projects": {
+    "title": "Projects",
+    "addProject": "Add Project",
+    "editProject": "Edit Project",
+    "deleteProject": "Delete Project",
+    "name": "Project Name",
+    "description": "Description",
+    "client": "Client",
+    "status": "Status",
+    "startDate": "Start Date",
+    "deadline": "Deadline",
+    "budget": "Budget",
+    "currency": "Currency",
+    "tasks": "Tasks",
+    "noProjects": "No projects yet. Create your first project!",
+    "deleteConfirm": "Are you sure you want to delete this project?",
+    "statuses": {
+      "proposal": "Proposal",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "kanban": {
+    "title": "Kanban Board",
+    "addTask": "Add Task",
+    "editTask": "Edit Task",
+    "deleteTask": "Delete Task",
+    "taskTitle": "Task Title",
+    "description": "Description",
+    "priority": "Priority",
+    "dueDate": "Due Date",
+    "columns": {
+      "backlog": "Backlog",
+      "todo": "To Do",
+      "in_progress": "In Progress",
+      "review": "Review",
+      "done": "Done"
+    },
+    "priorities": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    }
+  },
+  "transactions": {
+    "title": "Transactions",
+    "addTransaction": "Add Transaction",
+    "editTransaction": "Edit Transaction",
+    "deleteTransaction": "Delete Transaction",
+    "type": "Type",
+    "amount": "Amount",
+    "date": "Date",
+    "description": "Description",
+    "project": "Project",
+    "isPaid": "Paid",
+    "category": "Category",
+    "income": "Income",
+    "expense": "Expense",
+    "noTransactions": "No transactions yet. Record your first transaction!",
+    "deleteConfirm": "Are you sure you want to delete this transaction?"
+  },
+  "assets": {
+    "title": "Assets",
+    "addAsset": "Add Asset",
+    "editAsset": "Edit Asset",
+    "deleteAsset": "Delete Asset",
+    "name": "Asset Name",
+    "type": "Type",
+    "amount": "Amount",
+    "currency": "Currency",
+    "totalValue": "Total Value",
+    "noAssets": "No assets yet. Add your first asset!",
+    "deleteConfirm": "Are you sure you want to delete this asset?",
+    "types": {
+      "cash": "Cash",
+      "bank": "Bank Account",
+      "gold": "Gold",
+      "stock": "Stocks",
+      "crypto": "Cryptocurrency"
+    }
+  },
+  "projections": {
+    "title": "Financial Projections",
+    "monthlyOverview": "Monthly Overview",
+    "projectedBalance": "Projected Balance",
+    "recurringItems": "Recurring Items",
+    "addRecurring": "Add Recurring Item",
+    "settings": "Projection Settings",
+    "inflationRate": "Annual Inflation Rate",
+    "salaryIncreaseRate": "Annual Salary Increase Rate",
+    "debtAnalysis": "Debt Payoff Analysis",
+    "debtFreeDate": "Debt-Free Date",
+    "totalDebt": "Total Debt",
+    "monthlyPayment": "Monthly Payment",
+    "frequency": {
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAsRead": "Mark as Read",
+    "markAllAsRead": "Mark All as Read",
+    "clearAll": "Clear All",
+    "noNotifications": "No notifications",
+    "types": {
+      "info": "Information",
+      "warning": "Warning",
+      "success": "Success",
+      "error": "Error",
+      "reminder": "Reminder"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile Settings",
+    "preferences": "Preferences",
+    "notifications": "Notification Settings",
+    "appearance": "Appearance",
+    "language": "Language",
+    "theme": "Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "saveSuccess": "Settings saved successfully!"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "dashboard": "Admin Dashboard",
+    "users": "Users",
+    "activeUsers": "Active Users",
+    "notifications": "Send Notification",
+    "activityLogs": "Activity Logs",
+    "systemStats": "System Statistics",
+    "totalUsers": "Total Users",
+    "activeNow": "Active Now",
+    "dailyActive": "Daily Active Users"
+  }
+}

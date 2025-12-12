@@ -1,0 +1,281 @@
+{
+  "common": {
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "add": "Ekle",
+    "close": "Kapat",
+    "loading": "Yükleniyor...",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "actions": "İşlemler",
+    "confirm": "Onayla",
+    "back": "Geri",
+    "next": "İleri",
+    "submit": "Gönder",
+    "clear": "Temizle",
+    "yes": "Evet",
+    "no": "Hayır",
+    "all": "Tümü",
+    "none": "Hiçbiri",
+    "noData": "Veri bulunamadı",
+    "error": "Bir hata oluştu",
+    "success": "İşlem başarılı",
+    "required": "Bu alan zorunludur"
+  },
+  "auth": {
+    "login": "Giriş Yap",
+    "logout": "Çıkış Yap",
+    "register": "Kayıt Ol",
+    "email": "E-posta",
+    "password": "Şifre",
+    "confirmPassword": "Şifre Tekrar",
+    "fullName": "Ad Soyad",
+    "forgotPassword": "Şifremi Unuttum",
+    "resetPassword": "Şifre Sıfırla",
+    "noAccount": "Hesabınız yok mu?",
+    "hasAccount": "Zaten hesabınız var mı?",
+    "signInWith": "{provider} ile giriş yap",
+    "loginSuccess": "Tekrar hoş geldiniz!",
+    "registerSuccess": "Hesap başarıyla oluşturuldu!",
+    "invalidCredentials": "Geçersiz e-posta veya şifre"
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "dashboard": "Panel",
+    "clients": "Müşteriler",
+    "projects": "Projeler",
+    "transactions": "İşlemler",
+    "assets": "Varlıklar",
+    "projections": "Projeksiyon",
+    "settings": "Ayarlar",
+    "admin": "Yönetim Paneli",
+    "profile": "Profil"
+  },
+  "landing": {
+    "hero": {
+      "title": "Freelance Kariyerinizin Kontrolünü Elinize Alın",
+      "subtitle": "Projelerinizi, müşterilerinizi ve finansmanınızı yönetmek için hepsi bir arada platform. Güçlü analizlerle daha akıllı kararlar verin.",
+      "cta": "Ücretsiz Başla",
+      "login": "Giriş Yap"
+    },
+    "features": {
+      "title": "İhtiyacınız Olan Her Şey",
+      "subtitle": "Freelancerlar için özel olarak tasarlanmış güçlü araçlar",
+      "projectManagement": {
+        "title": "Proje Yönetimi",
+        "description": "Projelerinizi tekliften tamamlanmaya kadar sezgisel Kanban panosuyla takip edin."
+      },
+      "financialTracking": {
+        "title": "Finansal Takip",
+        "description": "Gelir, gider ve varlıklarınızı tek bir yerde gerçek zamanlı içgörülerle izleyin."
+      },
+      "clientCRM": {
+        "title": "Müşteri CRM",
+        "description": "Detaylı profiller ve proje geçmişi ile müşteri ilişkilerinizi yönetin."
+      },
+      "projections": {
+        "title": "36 Aylık Projeksiyon",
+        "description": "Akıllı tahmin ve trend analizi ile finansal geleceğinizi görün."
+      },
+      "recurring": {
+        "title": "Düzenli Ödemeler",
+        "description": "Abonelikler, krediler ve düzenli ödemeleri otomatik hesaplamalarla takip edin."
+      },
+      "notifications": {
+        "title": "Akıllı Bildirimler",
+        "description": "Özelleştirilebilir hatırlatıcılar ve uyarılarla hiçbir son tarihi kaçırmayın."
+      }
+    },
+    "benefits": {
+      "title": "Freelancerlar Neden Bizi Seçiyor",
+      "free": "%100 Ücretsiz ve Açık Kaynak",
+      "secure": "Verileriniz Sizin Kalır",
+      "fast": "Yıldırım Hızında Performans"
+    },
+    "cta": {
+      "title": "Freelance İşinizi Dönüştürmeye Hazır mısınız?",
+      "subtitle": "Kariyerlerinin kontrolünü eline alan binlerce freelancera katılın.",
+      "button": "Bugün Ücretsiz Başla"
+    },
+    "footer": {
+      "rights": "Tüm hakları saklıdır.",
+      "madeWith": "❤️ ile yapıldı"
+    }
+  },
+  "dashboard": {
+    "title": "Panel",
+    "welcome": "Tekrar hoş geldiniz, {name}!",
+    "overview": "Genel Bakış",
+    "recentProjects": "Son Projeler",
+    "upcomingTasks": "Yaklaşan Görevler",
+    "financialSummary": "Finansal Özet",
+    "quickActions": "Hızlı İşlemler",
+    "stats": {
+      "totalIncome": "Toplam Gelir",
+      "totalExpenses": "Toplam Gider",
+      "netBalance": "Net Bakiye",
+      "activeProjects": "Aktif Projeler",
+      "pendingTasks": "Bekleyen Görevler",
+      "totalClients": "Toplam Müşteri"
+    }
+  },
+  "clients": {
+    "title": "Müşteriler",
+    "addClient": "Müşteri Ekle",
+    "editClient": "Müşteri Düzenle",
+    "deleteClient": "Müşteri Sil",
+    "companyName": "Firma Adı",
+    "contactPerson": "İlgili Kişi",
+    "email": "E-posta",
+    "phone": "Telefon",
+    "address": "Adres",
+    "notes": "Notlar",
+    "projects": "Projeler",
+    "noClients": "Henüz müşteri yok. İlk müşterinizi ekleyin!",
+    "deleteConfirm": "Bu müşteriyi silmek istediğinizden emin misiniz?",
+    "searchPlaceholder": "Müşteri ara..."
+  },
+  "projects": {
+    "title": "Projeler",
+    "addProject": "Proje Ekle",
+    "editProject": "Proje Düzenle",
+    "deleteProject": "Proje Sil",
+    "name": "Proje Adı",
+    "description": "Açıklama",
+    "client": "Müşteri",
+    "status": "Durum",
+    "startDate": "Başlangıç Tarihi",
+    "deadline": "Bitiş Tarihi",
+    "budget": "Bütçe",
+    "currency": "Para Birimi",
+    "tasks": "Görevler",
+    "noProjects": "Henüz proje yok. İlk projenizi oluşturun!",
+    "deleteConfirm": "Bu projeyi silmek istediğinizden emin misiniz?",
+    "statuses": {
+      "proposal": "Teklif",
+      "active": "Aktif",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal"
+    }
+  },
+  "kanban": {
+    "title": "Kanban Panosu",
+    "addTask": "Görev Ekle",
+    "editTask": "Görev Düzenle",
+    "deleteTask": "Görev Sil",
+    "taskTitle": "Görev Başlığı",
+    "description": "Açıklama",
+    "priority": "Öncelik",
+    "dueDate": "Son Tarih",
+    "columns": {
+      "backlog": "Bekleme",
+      "todo": "Yapılacak",
+      "in_progress": "Devam Eden",
+      "review": "İnceleme",
+      "done": "Tamamlandı"
+    },
+    "priorities": {
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek"
+    }
+  },
+  "transactions": {
+    "title": "İşlemler",
+    "addTransaction": "İşlem Ekle",
+    "editTransaction": "İşlem Düzenle",
+    "deleteTransaction": "İşlem Sil",
+    "type": "Tür",
+    "amount": "Tutar",
+    "date": "Tarih",
+    "description": "Açıklama",
+    "project": "Proje",
+    "isPaid": "Ödendi",
+    "category": "Kategori",
+    "income": "Gelir",
+    "expense": "Gider",
+    "noTransactions": "Henüz işlem yok. İlk işleminizi kaydedin!",
+    "deleteConfirm": "Bu işlemi silmek istediğinizden emin misiniz?"
+  },
+  "assets": {
+    "title": "Varlıklar",
+    "addAsset": "Varlık Ekle",
+    "editAsset": "Varlık Düzenle",
+    "deleteAsset": "Varlık Sil",
+    "name": "Varlık Adı",
+    "type": "Tür",
+    "amount": "Miktar",
+    "currency": "Para Birimi",
+    "totalValue": "Toplam Değer",
+    "noAssets": "Henüz varlık yok. İlk varlığınızı ekleyin!",
+    "deleteConfirm": "Bu varlığı silmek istediğinizden emin misiniz?",
+    "types": {
+      "cash": "Nakit",
+      "bank": "Banka Hesabı",
+      "gold": "Altın",
+      "stock": "Hisse Senedi",
+      "crypto": "Kripto Para"
+    }
+  },
+  "projections": {
+    "title": "Finansal Projeksiyon",
+    "monthlyOverview": "Aylık Genel Bakış",
+    "projectedBalance": "Tahmini Bakiye",
+    "recurringItems": "Düzenli Kalemler",
+    "addRecurring": "Düzenli Kalem Ekle",
+    "settings": "Projeksiyon Ayarları",
+    "inflationRate": "Yıllık Enflasyon Oranı",
+    "salaryIncreaseRate": "Yıllık Zam Oranı",
+    "debtAnalysis": "Borç Ödeme Analizi",
+    "debtFreeDate": "Borçsuz Olma Tarihi",
+    "totalDebt": "Toplam Borç",
+    "monthlyPayment": "Aylık Ödeme",
+    "frequency": {
+      "monthly": "Aylık",
+      "yearly": "Yıllık"
+    }
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "markAsRead": "Okundu İşaretle",
+    "markAllAsRead": "Tümünü Okundu İşaretle",
+    "clearAll": "Tümünü Temizle",
+    "noNotifications": "Bildirim yok",
+    "types": {
+      "info": "Bilgi",
+      "warning": "Uyarı",
+      "success": "Başarılı",
+      "error": "Hata",
+      "reminder": "Hatırlatma"
+    }
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "profile": "Profil Ayarları",
+    "preferences": "Tercihler",
+    "notifications": "Bildirim Ayarları",
+    "appearance": "Görünüm",
+    "language": "Dil",
+    "theme": "Tema",
+    "themes": {
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem"
+    },
+    "saveSuccess": "Ayarlar başarıyla kaydedildi!"
+  },
+  "admin": {
+    "title": "Yönetim Paneli",
+    "dashboard": "Yönetim Paneli",
+    "users": "Kullanıcılar",
+    "activeUsers": "Aktif Kullanıcılar",
+    "notifications": "Bildirim Gönder",
+    "activityLogs": "Aktivite Logları",
+    "systemStats": "Sistem İstatistikleri",
+    "totalUsers": "Toplam Kullanıcı",
+    "activeNow": "Şu An Aktif",
+    "dailyActive": "Günlük Aktif Kullanıcı"
+  }
+}
