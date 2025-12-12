@@ -173,3 +173,95 @@ export function useFinancialProjection(months: number = 12) {
     enabled: !!settings,
   })
 }
+
+interface DebtAnalysis {
+  totalDebt: number
+  monthlyPayment: number
+  debtFreeDate: Date | null
+  monthsToPayoff: number | null
+  debts: {
+    name: string
+    amount: number
+    monthlyPayment: number
+    endDate: Date | null
+    monthsRemaining: number | null
+  }[]
+}
+
+export function useDebtAnalysis() {
+  const { data: recurringItems } = useRecurringItems()
+
+  return useQuery({
+    queryKey: ['debt-analysis', recurringItems],
+    queryFn: async (): Promise<DebtAnalysis> => {
+      const now = new Date()
+      const debts: DebtAnalysis['debts'] = []
+      let totalMonthlyPayment = 0
+      let totalDebt = 0
+      let latestEndDate: Date | null = null
+
+      // Find all expenses with an end_date (these are debts/loans)
+      recurringItems?.forEach((item) => {
+        if (item.type === 'expense' && item.end_date) {
+          const endDate = new Date(item.end_date)
+          const startDate = new Date(item.start_date)
+          
+          // Only include active debts
+          if (endDate > now) {
+            const monthlyPayment = item.frequency === 'monthly' 
+              ? Number(item.amount) 
+              : Number(item.amount) / 12
+
+            // Calculate months remaining
+            const monthsRemaining = Math.ceil(
+              (endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30)
+            )
+
+            // Calculate remaining total debt (monthly payment * months remaining)
+            const remainingDebt = monthlyPayment * monthsRemaining
+
+            totalDebt += remainingDebt
+            totalMonthlyPayment += monthlyPayment
+
+            if (!latestEndDate || endDate > latestEndDate) {
+              latestEndDate = endDate
+            }
+
+            debts.push({
+              name: item.name,
+              amount: Math.round(remainingDebt),
+              monthlyPayment: Math.round(monthlyPayment),
+              endDate,
+              monthsRemaining,
+            })
+          }
+        }
+      })
+
+      // Calculate months to payoff
+      let monthsToPayoff: number | null = null
+      if (latestEndDate !== null && totalMonthlyPayment > 0) {
+        const endDateMs = (latestEndDate as Date).getTime()
+        monthsToPayoff = Math.ceil(
+          (endDateMs - now.getTime()) / (1000 * 60 * 60 * 24 * 30)
+        )
+      }
+
+      // Sort debts by end date
+      debts.sort((a, b) => {
+        if (!a.endDate) return 1
+        if (!b.endDate) return -1
+        return a.endDate.getTime() - b.endDate.getTime()
+      })
+
+      return {
+        totalDebt: Math.round(totalDebt),
+        monthlyPayment: Math.round(totalMonthlyPayment),
+        debtFreeDate: latestEndDate,
+        monthsToPayoff,
+        debts,
+      }
+    },
+    enabled: !!recurringItems,
+  })
+}

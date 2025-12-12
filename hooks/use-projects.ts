@@ -147,3 +147,22 @@ export function useDeleteProject() {
     },
   })
 }
+
+export function useProjectsByClient(clientId: string) {
+  const supabase = createClient()
+
+  return useQuery({
+    queryKey: ['projects', 'client', clientId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('client_id', clientId)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data as Project[]
+    },
+    enabled: !!clientId,
+  })
+}

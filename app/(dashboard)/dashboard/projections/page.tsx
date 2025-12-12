@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { ProjectionChart, RecurringItemFormDialog, RecurringItemsList } from '@/components/projections'
+import { ProjectionChart, RecurringItemFormDialog, RecurringItemsList, DebtAnalysisCard } from '@/components/projections'
 
 export default function ProjectionsPage() {
   const [months, setMonths] = useState(24)
@@ -187,6 +187,9 @@ export default function ProjectionsPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Borç Analizi */}
+      <DebtAnalysisCard />
 
       {/* Tekrarlayan Kalemler */}
       <Card>

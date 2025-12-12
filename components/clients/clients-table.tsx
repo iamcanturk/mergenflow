@@ -3,7 +3,8 @@
 import { useState, useMemo } from 'react'
 import { useClients } from '@/hooks/use-clients'
 import { Client } from '@/types'
-import { MoreHorizontal, Pencil, Trash2, Mail, Phone, Search, X } from 'lucide-react'
+import { MoreHorizontal, Pencil, Trash2, Mail, Phone, Search, X, Eye } from 'lucide-react'
+import Link from 'next/link'
 
 import {
   Table,
@@ -127,7 +128,14 @@ export function ClientsTable() {
             <TableBody>
               {filteredClients.map((client) => (
               <TableRow key={client.id}>
-                <TableCell className="font-medium">{client.company_name}</TableCell>
+                <TableCell className="font-medium">
+                  <Link 
+                    href={`/dashboard/clients/${client.id}`}
+                    className="hover:text-primary hover:underline"
+                  >
+                    {client.company_name}
+                  </Link>
+                </TableCell>
                 <TableCell>{client.contact_person || '-'}</TableCell>
                 <TableCell>
                   {client.email ? (
@@ -164,6 +172,12 @@ export function ClientsTable() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/clients/${client.id}`}>
+                          <Eye className="mr-2 h-4 w-4" />
+                          Görüntüle
+                        </Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleEdit(client)}>
                         <Pencil className="mr-2 h-4 w-4" />
                         Düzenle
