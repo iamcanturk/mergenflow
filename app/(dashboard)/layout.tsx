@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
+import { AppSidebar, AppHeader } from '@/components/layout'
 
 export default async function DashboardLayout({
   children,
@@ -14,11 +16,14 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      {/* TODO: Faz 3'te Sidebar ve Header eklenecek */}
-      <main className="p-8">
-        {children}
-      </main>
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <AppHeader />
+        <main className="flex-1 p-6">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
