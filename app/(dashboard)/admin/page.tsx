@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Users, FolderKanban, Wallet, TrendingUp, ArrowLeft, Bell } from 'lucide-react'
+import { Users, FolderKanban, Wallet, TrendingUp, ArrowLeft, Bell, Activity, LayoutDashboard } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -57,6 +57,12 @@ export default async function AdminDashboardPage() {
             </p>
           </div>
         </div>
+        <Link href="/dashboard">
+          <Button variant="outline" className="gap-2">
+            <LayoutDashboard className="h-4 w-4" />
+            Kullanıcı Paneline Geç
+          </Button>
+        </Link>
       </div>
 
       {/* İstatistik Kartları */}
@@ -115,7 +121,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Admin Menü */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Link href="/admin/users">
           <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardHeader>
@@ -139,6 +145,20 @@ export default async function AdminDashboardPage() {
               </CardTitle>
               <CardDescription>
                 Kullanıcılara bildirim gönder
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
+
+        <Link href="/admin/active-users">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="h-5 w-5" />
+                Aktif Kullanıcılar
+              </CardTitle>
+              <CardDescription>
+                Çevrimiçi kullanıcılar ve aktivite logları
               </CardDescription>
             </CardHeader>
           </Card>

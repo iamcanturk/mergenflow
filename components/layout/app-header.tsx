@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { UserNav } from './user-nav'
 import { NotificationDropdown } from '@/components/notifications/notification-dropdown'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 const breadcrumbLabels: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -27,6 +28,7 @@ const breadcrumbLabels: Record<string, string> = {
   users: 'Kullanıcılar',
   notifications: 'Bildirimler',
   kanban: 'Kanban',
+  'active-users': 'Aktif Kullanıcılar',
 }
 
 export function AppHeader() {
@@ -64,6 +66,7 @@ export function AppHeader() {
         </Breadcrumb>
       </div>
       <div className="flex items-center gap-2">
+        <ThemeToggle />
         <NotificationDropdown />
         <UserNav />
       </div>
