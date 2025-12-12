@@ -1,6 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+'use client'
+
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ClientsTable, ClientFormDialog } from '@/components/clients'
 
 export default function ClientsPage() {
+  const [formOpen, setFormOpen] = useState(false)
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -10,18 +17,19 @@ export default function ClientsPage() {
             Müşterilerinizi yönetin
           </p>
         </div>
+        <Button onClick={() => setFormOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Yeni Müşteri
+        </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Müşteri Listesi</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Faz 4&apos;te müşteri listesi ve CRUD işlemleri eklenecek.
-          </p>
-        </CardContent>
-      </Card>
+      <ClientsTable />
+
+      <ClientFormDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        client={null}
+      />
     </div>
   )
 }
