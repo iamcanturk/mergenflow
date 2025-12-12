@@ -39,9 +39,10 @@ export interface ProjectTask {
   title: string
   description: string | null
   status: 'backlog' | 'todo' | 'in_progress' | 'review' | 'done'
-  priority: 'low' | 'medium' | 'high'
+  priority: 'low' | 'medium' | 'high' | 'urgent'
   due_date: string | null
   order_index: number
+  position?: number // Alias for order_index used in Kanban
   created_at: string
 }
 
