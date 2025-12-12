@@ -49,6 +49,23 @@ export function useTasks(projectId: string) {
   })
 }
 
+export function useAllTasks() {
+  const supabase = createClient()
+
+  return useQuery({
+    queryKey: ['all-tasks'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('project_tasks')
+        .select('*, projects(name)')
+        .order('due_date', { ascending: true })
+
+      if (error) throw error
+      return data as (ProjectTask & { projects: { name: string } | null })[]
+    },
+  })
+}
+
 export function useCreateTask() {
   const supabase = createClient()
   const queryClient = useQueryClient()

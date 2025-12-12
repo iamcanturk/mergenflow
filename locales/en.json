@@ -22,7 +22,10 @@
     "noData": "No data available",
     "error": "An error occurred",
     "success": "Operation successful",
-    "required": "This field is required"
+    "required": "This field is required",
+    "currency": "Currency",
+    "notes": "Notes",
+    "select": "Select"
   },
   "auth": {
     "login": "Login",
@@ -51,53 +54,106 @@
     "projections": "Projections",
     "settings": "Settings",
     "admin": "Admin Panel",
-    "profile": "Profile"
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "freelance": "Freelance",
+    "finance": "Finance",
+    "system": "System",
+    "calendar": "Calendar",
+    "timeTracking": "Time Tracking",
+    "reports": "Reports",
+    "goals": "Goals"
   },
   "landing": {
     "hero": {
       "title": "Take Control of Your Freelance Career",
-      "subtitle": "The all-in-one platform for managing your projects, clients, and finances. Make smarter decisions with powerful analytics.",
+      "titleLine1": "Manage Your Freelance",
+      "titleLine2": "Business Professionally",
+      "subtitle": "Manage your clients, projects, and finances in one platform. See the path to financial freedom.",
+      "badge": "Open source, 100% free",
       "cta": "Get Started Free",
-      "login": "Login"
+      "login": "Login",
+      "github": "View on GitHub"
+    },
+    "stats": {
+      "users": "Active Users",
+      "projects": "Managed Projects",
+      "amount": "Processed Amount",
+      "satisfaction": "Satisfaction"
     },
     "features": {
-      "title": "Everything You Need",
-      "subtitle": "Powerful tools designed specifically for freelancers",
+      "title": "Everything You Need in One Platform",
+      "subtitle": "Powerful and easy-to-use tools designed specifically for freelancers",
       "projectManagement": {
         "title": "Project Management",
-        "description": "Track your projects from proposal to completion with our intuitive Kanban board."
+        "description": "Track your projects from proposal to completion. Budget and deadline control."
       },
       "financialTracking": {
-        "title": "Financial Tracking",
-        "description": "Monitor your income, expenses, and assets in one place with real-time insights."
+        "title": "Income & Expense Tracking",
+        "description": "Record all your financial transactions. Manage invoices and payments."
       },
       "clientCRM": {
-        "title": "Client CRM",
-        "description": "Manage your client relationships with detailed profiles and project history."
+        "title": "Client Management",
+        "description": "Manage all your clients in one place. Contact info, projects, and payments."
       },
       "projections": {
-        "title": "36-Month Projections",
-        "description": "See your financial future with intelligent forecasting and trend analysis."
+        "title": "36-Month Projection",
+        "description": "Forecast your financial future with inflation and income growth calculations."
       },
       "recurring": {
-        "title": "Recurring Items",
+        "title": "Recurring Payments",
         "description": "Track subscriptions, loans, and regular payments with automatic calculations."
       },
       "notifications": {
         "title": "Smart Notifications",
-        "description": "Never miss a deadline with customizable reminders and alerts."
+        "description": "Never miss a date with push notifications and email reminders."
+      },
+      "kanban": {
+        "title": "Kanban Board",
+        "description": "Organize your tasks with drag-and-drop. Scrum and Kanban methodologies."
+      },
+      "assets": {
+        "title": "Asset Management",
+        "description": "Track your cash, bank, gold, stocks, and crypto assets in one place."
+      },
+      "timeTracking": {
+        "title": "Time Tracking",
+        "description": "Log time spent on projects, bill hourly rates."
+      },
+      "goals": {
+        "title": "Goal Tracking",
+        "description": "Set income, project, and savings goals, monitor your progress."
       }
     },
     "benefits": {
-      "title": "Why Freelancers Choose Us",
-      "free": "100% Free & Open Source",
-      "secure": "Your Data Stays Yours",
-      "fast": "Lightning Fast Performance"
+      "title": "Why MergenFlow?",
+      "subtitle": "Financial uncertainty is the biggest challenge for freelancers. With MergenFlow, see where you're heading.",
+      "months": "Months",
+      "projection": "Financial Projection",
+      "projectionDesc": "Plan your future with inflation and income growth calculations",
+      "list": {
+        "professional": "Manage your freelance work professionally",
+        "forecast": "See when you'll reach your financial goals",
+        "secure": "Your client and project data stays secure",
+        "mobile": "Mobile responsive, access anywhere",
+        "multilang": "English and Turkish language support",
+        "budget": "Budget planning with regular income/expense tracking",
+        "opensource": "Open source, community supported",
+        "free": "100% free, no hidden costs"
+      }
+    },
+    "opensource": {
+      "badge": "Open Source",
+      "title": "Open Source and Free",
+      "description": "MergenFlow is completely open source. You can inspect the code, fork it, and host it on your own server.",
+      "viewGithub": "View on GitHub",
+      "star": "Star Us"
     },
     "cta": {
-      "title": "Ready to Transform Your Freelance Business?",
-      "subtitle": "Join thousands of freelancers who are taking control of their careers.",
-      "button": "Start Free Today"
+      "title": "Get Started Today",
+      "subtitle": "Create a free account and take your freelance career to the next level.",
+      "button": "Create Free Account",
+      "noCreditCard": "No credit card required"
     },
     "footer": {
       "rights": "All rights reserved.",
@@ -109,9 +165,17 @@
     "welcome": "Welcome back, {name}!",
     "overview": "Overview",
     "recentProjects": "Recent Projects",
+    "recentTransactions": "Recent Transactions",
     "upcomingTasks": "Upcoming Tasks",
     "financialSummary": "Financial Summary",
     "quickActions": "Quick Actions",
+    "quickActionsDescription": "Common tasks at your fingertips",
+    "pendingPayments": "Pending Payments",
+    "collected": "Collected",
+    "pending": "Not collected yet",
+    "unpaid": "Unpaid",
+    "projectionsDescription": "See your financial future with 36-month projections",
+    "viewProjections": "View Projections",
     "stats": {
       "totalIncome": "Total Income",
       "totalExpenses": "Total Expenses",
@@ -152,7 +216,9 @@
     "currency": "Currency",
     "tasks": "Tasks",
     "noProjects": "No projects yet. Create your first project!",
+    "noClient": "No client",
     "deleteConfirm": "Are you sure you want to delete this project?",
+    "kanban": "Kanban",
     "statuses": {
       "proposal": "Proposal",
       "active": "Active",
@@ -197,7 +263,21 @@
     "income": "Income",
     "expense": "Expense",
     "noTransactions": "No transactions yet. Record your first transaction!",
-    "deleteConfirm": "Are you sure you want to delete this transaction?"
+    "deleteConfirm": "Are you sure you want to delete this transaction?",
+    "editDescription": "Update transaction details.",
+    "addDescription": "Add a new income or expense.",
+    "selectType": "Select type",
+    "noProject": "No project",
+    "paid": "Paid",
+    "markAsPaid": "Mark as paid",
+    "deleteTitle": "Delete Transaction",
+    "deleteMessage": "Are you sure you want to delete this {type} ({amount})? This action cannot be undone.",
+    "incomeLabel": "income",
+    "expenseLabel": "expense",
+    "deleting": "Deleting...",
+    "saving": "Saving...",
+    "amountValidation": "Amount must be positive",
+    "dateRequired": "Date is required"
   },
   "assets": {
     "title": "Assets",
@@ -205,10 +285,21 @@
     "editAsset": "Edit Asset",
     "deleteAsset": "Delete Asset",
     "name": "Asset Name",
+    "namePlaceholder": "e.g., Savings Account, Bitcoin",
     "type": "Type",
+    "selectType": "Select type",
     "amount": "Amount",
     "currency": "Currency",
     "totalValue": "Total Value",
+    "quantity": "Quantity",
+    "unitPrice": "Unit Price",
+    "currentPricePerUnit": "Current market price per unit",
+    "purchaseDate": "Purchase Date",
+    "notesPlaceholder": "Additional notes about this asset...",
+    "calculatedFromQuantity": "Calculated from quantity × unit price",
+    "enterManuallyOrUseQuantity": "Enter manually or use quantity × unit price",
+    "addDescription": "Add a new asset to your portfolio.",
+    "editDescription": "Update asset details.",
     "noAssets": "No assets yet. Add your first asset!",
     "deleteConfirm": "Are you sure you want to delete this asset?",
     "types": {
@@ -217,24 +308,110 @@
       "gold": "Gold",
       "stock": "Stocks",
       "crypto": "Cryptocurrency"
+    },
+    "units": {
+      "gram": "grams",
+      "shares": "shares",
+      "coins": "coins",
+      "units": "units"
     }
   },
   "projections": {
     "title": "Financial Projections",
+    "subtitle": "Plan your financial future",
     "monthlyOverview": "Monthly Overview",
     "projectedBalance": "Projected Balance",
     "recurringItems": "Recurring Items",
+    "recurringDescription": "Regular items like salary, rent, subscriptions",
     "addRecurring": "Add Recurring Item",
-    "settings": "Projection Settings",
+    "settings": "Settings",
+    "settingsTitle": "Projection Settings",
+    "settingsDescription": "Set inflation and salary increase rates.",
     "inflationRate": "Annual Inflation Rate",
+    "inflationLabel": "Annual Inflation Rate (%)",
+    "inflationHint": "Annual increase rate applied to expenses",
     "salaryIncreaseRate": "Annual Salary Increase Rate",
+    "salaryLabel": "Annual Salary Increase Rate (%)",
+    "salaryHint": "Annual increase rate applied to income",
     "debtAnalysis": "Debt Payoff Analysis",
     "debtFreeDate": "Debt-Free Date",
     "totalDebt": "Total Debt",
     "monthlyPayment": "Monthly Payment",
+    "currentAssets": "Current Assets",
+    "totalInCurrency": "Total in {currency}",
+    "afterMonths": "After {months} Months",
+    "estimatedCumulative": "Estimated cumulative assets",
+    "inflation": "Inflation",
+    "annualExpenseIncrease": "Annual expense increase",
+    "salaryIncrease": "Salary Increase",
+    "annualIncomeIncrease": "Annual income increase",
+    "cumulativeProjection": "Cumulative Asset Projection",
+    "futureAssetDescription": "Your estimated future asset status",
+    "selectPeriod": "Select period",
+    "months": "{count} Months",
+    "years": "{count} Years",
+    "monthlyIncomeExpense": "Monthly Income & Expense Projection",
+    "monthlyFlowDescription": "Monthly flow with inflation and salary increase applied",
+    "noProjectionData": "Add recurring income/expenses for projection",
+    "chartView": "Chart",
+    "tableView": "Table",
+    "month": "Month",
+    "income": "Income",
+    "expense": "Expense",
+    "net": "Net",
+    "cumulative": "Cumulative",
+    "saving": "Saving",
+    "saving_plural": "Savings",
     "frequency": {
       "monthly": "Monthly",
       "yearly": "Yearly"
+    },
+    "recurring": {
+      "title": "Recurring Income & Expenses",
+      "noItems": "No recurring items yet.",
+      "addDescription": "Add regular income and expenses like salary, rent.",
+      "monthlyIncome": "Monthly Income",
+      "monthlyExpense": "Monthly Expense",
+      "monthlyNet": "Monthly Net",
+      "type": "Type",
+      "name": "Name",
+      "namePlaceholder": "e.g., Salary, Rent, Netflix",
+      "frequency": "Frequency",
+      "amount": "Amount",
+      "dateRange": "Date Range",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "indefinite": "Indefinite",
+      "editTitle": "Edit Recurring Item",
+      "addTitle": "New Recurring Item",
+      "editDescription": "Edit recurring income or expense item.",
+      "addItemDescription": "Add regular income or expense like salary, rent.",
+      "deleteTitle": "Delete Item",
+      "deleteConfirm": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "deleting": "Deleting...",
+      "selectType": "Select type",
+      "selectFrequency": "Select frequency",
+      "nameValidation": "Name must be at least 2 characters",
+      "amountValidation": "Amount must be positive",
+      "startDateRequired": "Start date is required",
+      "update": "Update"
+    },
+    "debt": {
+      "title": "Debt Analysis",
+      "description": "Analysis of loans and installment debts",
+      "loadError": "Error loading data",
+      "congratulations": "Congratulations!",
+      "noDebt": "You have no active debts.",
+      "addDebtHint": "Add an expense with an end date to track debts.",
+      "totalRemaining": "Total Remaining Debt",
+      "monthlyTotal": "Monthly Total Payment",
+      "debtFreeDate": "Debt-Free Date",
+      "monthsRemaining": "{count} months remaining",
+      "activeDebts": "Active Debts",
+      "remaining": "Remaining",
+      "perMonth": "/month",
+      "endsOn": "Ends",
+      "percentPaid": "{percent}% paid"
     }
   },
   "notifications": {
@@ -253,12 +430,25 @@
   },
   "settings": {
     "title": "Settings",
+    "description": "Account and application settings",
     "profile": "Profile Settings",
+    "profileDescription": "Update your account information",
+    "namePlaceholder": "Your Name",
+    "nameDescription": "This name will appear in your profile and sidebar.",
     "preferences": "Preferences",
     "notifications": "Notification Settings",
     "appearance": "Appearance",
+    "appearanceComingSoon": "Coming soon: Dark/Light theme and color preferences",
     "language": "Language",
     "theme": "Theme",
+    "users": "Users",
+    "currency": "Currency Preference",
+    "currencyDescription": "Choose your default currency for new entries",
+    "defaultCurrency": "Default Currency",
+    "currencyHint": "New assets and transactions will use this currency by default",
+    "projectionDescription": "Rates used for financial projection calculations",
+    "inflationHint": "Annual increase rate applied to expenses",
+    "salaryHint": "Annual increase rate applied to income",
     "themes": {
       "light": "Light",
       "dark": "Dark",
@@ -277,5 +467,118 @@
     "totalUsers": "Total Users",
     "activeNow": "Active Now",
     "dailyActive": "Daily Active Users"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "noEvents": "No events for this day",
+    "projectDeadline": "Project Deadline",
+    "taskDue": "Task Due",
+    "paymentDue": "Payment Due",
+    "reminder": "Reminder"
+  },
+  "timeTracking": {
+    "title": "Time Tracking",
+    "startTimer": "Start Timer",
+    "stopTimer": "Stop Timer",
+    "activeTimer": "Active Timer",
+    "noActiveTimer": "No active timer",
+    "totalToday": "Total Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "billable": "Billable",
+    "nonBillable": "Non-billable",
+    "hourlyRate": "Hourly Rate",
+    "duration": "Duration",
+    "manualEntry": "Manual Entry",
+    "selectProject": "Select Project",
+    "selectTask": "Select Task",
+    "description": "Description",
+    "entries": "Time Entries",
+    "noEntries": "No time entries yet",
+    "hours": "hours",
+    "minutes": "minutes"
+  },
+  "reports": {
+    "title": "Reports",
+    "incomeReport": "Income Report",
+    "expenseReport": "Expense Report",
+    "projectReport": "Project Report",
+    "clientReport": "Client Report",
+    "timeReport": "Time Report",
+    "dateRange": "Date Range",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "thisQuarter": "This Quarter",
+    "thisYear": "This Year",
+    "custom": "Custom Range",
+    "export": "Export",
+    "exportPDF": "Export PDF",
+    "exportCSV": "Export CSV",
+    "exportExcel": "Export Excel",
+    "totalIncome": "Total Income",
+    "totalExpense": "Total Expense",
+    "netProfit": "Net Profit",
+    "byCategory": "By Category",
+    "byClient": "By Client",
+    "byProject": "By Project",
+    "trend": "Trend"
+  },
+  "goals": {
+    "title": "Goals",
+    "createGoal": "Create Goal",
+    "editGoal": "Edit Goal",
+    "deleteGoal": "Delete Goal",
+    "activeGoals": "Active Goals",
+    "completedGoals": "Completed Goals",
+    "progress": "Progress",
+    "target": "Target",
+    "current": "Current",
+    "deadline": "Deadline",
+    "daysLeft": "days left",
+    "completed": "Completed!",
+    "types": {
+      "income": "Income Goal",
+      "projects": "Projects Goal",
+      "clients": "Clients Goal",
+      "hours": "Hours Goal",
+      "savings": "Savings Goal"
+    },
+    "periods": {
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "quarterly": "Quarterly",
+      "yearly": "Yearly"
+    },
+    "noGoals": "No goals yet. Set your first goal!",
+    "congratulations": "Congratulations! You've achieved your goal!"
+  },
+  "tags": {
+    "title": "Tags",
+    "createTag": "Create Tag",
+    "editTag": "Edit Tag",
+    "deleteTag": "Delete Tag",
+    "name": "Tag Name",
+    "color": "Color",
+    "noTags": "No tags yet"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "hourlyRate": "Hourly Rate",
+    "projectRate": "Project Rate",
+    "estimatedHours": "Estimated Hours",
+    "actualHours": "Actual Hours",
+    "totalEarnings": "Total Earnings",
+    "pricingType": "Pricing Type",
+    "types": {
+      "fixed": "Fixed Price",
+      "hourly": "Hourly Rate",
+      "milestone": "Milestone Based"
+    },
+    "calculator": "Pricing Calculator",
+    "suggestedRate": "Suggested Rate"
   }
 }

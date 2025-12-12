@@ -63,8 +63,12 @@ export interface Asset {
   user_id: string
   type: 'cash' | 'bank' | 'gold' | 'stock' | 'crypto'
   name: string
-  amount: number
+  amount: number // For simple assets OR total calculated value
+  quantity: number | null // Number of units (grams for gold, shares for stocks, etc.)
+  unit_price: number | null // Current price per unit
   currency: 'TRY' | 'USD' | 'EUR'
+  purchase_date: string | null
+  notes: string | null
   created_at: string
 }
 
@@ -84,6 +88,7 @@ export interface UserSettings {
   user_id: string
   inflation_rate: number
   salary_increase_rate: number
+  default_currency: 'TRY' | 'USD' | 'EUR'
   created_at: string
 }
 
@@ -96,6 +101,67 @@ export interface Profile {
   created_at?: string
 }
 
+// Tag system
+export interface Tag {
+  id: string
+  user_id: string
+  name: string
+  color: string
+  created_at: string
+}
+
+// Time tracking
+export interface TimeEntry {
+  id: string
+  user_id: string
+  project_id: string | null
+  task_id: string | null
+  description: string | null
+  start_time: string
+  end_time: string | null
+  duration_minutes: number | null
+  is_billable: boolean
+  hourly_rate: number | null
+  created_at: string
+}
+
+// Goals
+export interface Goal {
+  id: string
+  user_id: string
+  title: string
+  type: 'income' | 'projects' | 'clients' | 'hours' | 'savings'
+  target_value: number
+  current_value: number
+  period: 'weekly' | 'monthly' | 'quarterly' | 'yearly'
+  start_date: string
+  end_date: string
+  is_completed: boolean
+  created_at: string
+}
+
+// Push subscription
+export interface PushSubscription {
+  id: string
+  user_id: string
+  endpoint: string
+  p256dh: string
+  auth: string
+  created_at: string
+}
+
+// Extended Project with pricing
+export interface ProjectWithPricing extends Project {
+  pricing_type?: 'fixed' | 'hourly' | 'milestone'
+  hourly_rate?: number | null
+  estimated_hours?: number | null
+}
+
+// Extended UserSettings
+export interface UserSettingsExtended extends UserSettings {
+  default_hourly_rate?: number
+}
+
 // Insert tipleri (id ve created_at otomatik oluşturulur)
 export type ClientInsert = Omit<Client, 'id' | 'created_at'>
 export type ProjectInsert = Omit<Project, 'id' | 'created_at'>
@@ -103,6 +169,9 @@ export type ProjectTaskInsert = Omit<ProjectTask, 'id' | 'created_at'>
 export type TransactionInsert = Omit<Transaction, 'id' | 'created_at'>
 export type AssetInsert = Omit<Asset, 'id' | 'created_at'>
 export type RecurringItemInsert = Omit<RecurringItem, 'id' | 'created_at'>
+export type TagInsert = Omit<Tag, 'id' | 'created_at'>
+export type TimeEntryInsert = Omit<TimeEntry, 'id' | 'created_at'>
+export type GoalInsert = Omit<Goal, 'id' | 'created_at'>
 
 // Update tipleri (partial)
 export type ClientUpdate = Partial<Omit<Client, 'id' | 'user_id' | 'created_at'>>
@@ -112,6 +181,9 @@ export type TransactionUpdate = Partial<Omit<Transaction, 'id' | 'user_id' | 'cr
 export type AssetUpdate = Partial<Omit<Asset, 'id' | 'user_id' | 'created_at'>>
 export type RecurringItemUpdate = Partial<Omit<RecurringItem, 'id' | 'user_id' | 'created_at'>>
 export type UserSettingsUpdate = Partial<Omit<UserSettings, 'user_id' | 'created_at'>>
+export type TagUpdate = Partial<Omit<Tag, 'id' | 'user_id' | 'created_at'>>
+export type TimeEntryUpdate = Partial<Omit<TimeEntry, 'id' | 'user_id' | 'created_at'>>
+export type GoalUpdate = Partial<Omit<Goal, 'id' | 'user_id' | 'created_at'>>
 
 // Supabase Database tiplemesi
 export interface Database {

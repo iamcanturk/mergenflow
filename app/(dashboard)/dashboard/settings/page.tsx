@@ -13,8 +13,10 @@ import {
   useDeleteNotificationRule,
   useToggleNotificationRule,
 } from '@/hooks/use-notifications'
+import { useTranslation } from '@/lib/i18n'
+import { CURRENCIES } from '@/lib/constants'
 import { toast } from 'sonner'
-import { User, Settings2, Bell, Palette, Plus, Trash2 } from 'lucide-react'
+import { User, Settings2, Bell, Palette, Plus, Trash2, Coins, Smartphone } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -40,13 +42,14 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 
 const profileSchema = z.object({
-  full_name: z.string().min(2, 'İsim en az 2 karakter olmalı'),
+  full_name: z.string().min(2, 'Name must be at least 2 characters'),
 })
 
 type ProfileFormData = z.infer<typeof profileSchema>
 
 export default function SettingsPage() {
   const supabase = createClient()
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
@@ -55,6 +58,7 @@ export default function SettingsPage() {
 
   const [inflationRate, setInflationRate] = useState(25)
   const [salaryIncreaseRate, setSalaryIncreaseRate] = useState(15)
+  const [defaultCurrency, setDefaultCurrency] = useState<'TRY' | 'USD' | 'EUR'>('TRY')
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -91,6 +95,9 @@ export default function SettingsPage() {
     if (settings) {
       setInflationRate(settings.inflationRate)
       setSalaryIncreaseRate(settings.salaryIncreaseRate)
+      if (settings.defaultCurrency) {
+        setDefaultCurrency(settings.defaultCurrency)
+      }
     }
   }, [settings])
 
@@ -106,10 +113,10 @@ export default function SettingsPage() {
 
       if (error) throw error
 
-      toast.success('Profil güncellendi')
+      toast.success(t('settings.saveSuccess'))
     } catch (error) {
       console.error('Failed to update profile:', error)
-      toast.error('Profil güncellenemedi')
+      toast.error(t('common.error'))
     } finally {
       setSaving(false)
     }
@@ -117,11 +124,11 @@ export default function SettingsPage() {
 
   const handleSaveProjectionSettings = async () => {
     try {
-      await updateSettings.mutateAsync({ inflationRate, salaryIncreaseRate })
-      toast.success('Projeksiyon ayarları güncellendi')
+      await updateSettings.mutateAsync({ inflationRate, salaryIncreaseRate, defaultCurrency })
+      toast.success(t('settings.saveSuccess'))
     } catch (error) {
       console.error('Failed to update settings:', error)
-      toast.error('Ayarlar güncellenemedi')
+      toast.error(t('common.error'))
     }
   }
 
@@ -142,22 +149,22 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Ayarlar</h1>
+          <h1 className="text-3xl font-bold">{t('settings.title')}</h1>
           <p className="text-muted-foreground">
-            Hesap ve uygulama ayarlarınız
+            {t('settings.description')}
           </p>
         </div>
       </div>
 
-      {/* Profil Ayarları */}
+      {/* Profile Settings */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            Profil Ayarları
+            {t('settings.profile')}
           </CardTitle>
           <CardDescription>
-            Hesap bilgilerinizi güncelleyin
+            {t('settings.profileDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -168,40 +175,82 @@ export default function SettingsPage() {
                 name="full_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Ad Soyad</FormLabel>
+                    <FormLabel>{t('auth.fullName')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Adınız Soyadınız" {...field} />
+                      <Input placeholder={t('settings.namePlaceholder')} {...field} />
                     </FormControl>
                     <FormDescription>
-                      Bu isim profilinizde ve sidebar&apos;da görünecektir.
+                      {t('settings.nameDescription')}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" disabled={saving}>
-                {saving ? 'Kaydediliyor...' : 'Kaydet'}
+                {saving ? t('common.loading') : t('common.save')}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
 
-      {/* Projeksiyon Ayarları */}
+      {/* Currency Preference */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Coins className="h-5 w-5" />
+            {t('settings.currency')}
+          </CardTitle>
+          <CardDescription>
+            {t('settings.currencyDescription')}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="currency">{t('settings.defaultCurrency')}</Label>
+            <Select 
+              value={defaultCurrency} 
+              onValueChange={(value: 'TRY' | 'USD' | 'EUR') => setDefaultCurrency(value)}
+            >
+              <SelectTrigger id="currency" className="w-[200px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(CURRENCIES).map(([value, { label, symbol }]) => (
+                  <SelectItem key={value} value={value}>
+                    {symbol} {label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              {t('settings.currencyHint')}
+            </p>
+          </div>
+          <Button 
+            onClick={handleSaveProjectionSettings} 
+            disabled={updateSettings.isPending}
+          >
+            {updateSettings.isPending ? t('common.loading') : t('common.save')}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Projection Settings */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Settings2 className="h-5 w-5" />
-            Projeksiyon Ayarları
+            {t('projections.settings')}
           </CardTitle>
           <CardDescription>
-            Finansal projeksiyon hesaplamalarında kullanılacak oranlar
+            {t('settings.projectionDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="inflation">Yıllık Enflasyon Oranı (%)</Label>
+              <Label htmlFor="inflation">{t('projections.inflationRate')} (%)</Label>
               <Input
                 id="inflation"
                 type="number"
@@ -211,11 +260,11 @@ export default function SettingsPage() {
                 onChange={(e) => setInflationRate(Number(e.target.value))}
               />
               <p className="text-xs text-muted-foreground">
-                Giderlerinize uygulanacak yıllık artış oranı
+                {t('settings.inflationHint')}
               </p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="salary">Yıllık Maaş Artış Oranı (%)</Label>
+              <Label htmlFor="salary">{t('projections.salaryIncreaseRate')} (%)</Label>
               <Input
                 id="salary"
                 type="number"
@@ -225,7 +274,7 @@ export default function SettingsPage() {
                 onChange={(e) => setSalaryIncreaseRate(Number(e.target.value))}
               />
               <p className="text-xs text-muted-foreground">
-                Gelirlerinize uygulanacak yıllık artış oranı
+                {t('settings.salaryHint')}
               </p>
             </div>
           </div>
@@ -233,23 +282,26 @@ export default function SettingsPage() {
             onClick={handleSaveProjectionSettings} 
             disabled={updateSettings.isPending}
           >
-            {updateSettings.isPending ? 'Kaydediliyor...' : 'Kaydet'}
+            {updateSettings.isPending ? t('common.loading') : t('common.save')}
           </Button>
         </CardContent>
       </Card>
 
-      {/* Bildirim Kuralları */}
+      {/* Notification Rules */}
       <NotificationRulesCard />
 
-      {/* Tema Ayarları (Placeholder) */}
+      {/* Push Notifications */}
+      <PushNotificationsCard />
+
+      {/* Theme Settings (Placeholder) */}
       <Card className="opacity-60">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Palette className="h-5 w-5" />
-            Tema Ayarları
+            {t('settings.appearance')}
           </CardTitle>
           <CardDescription>
-            Yakında: Koyu/Açık tema ve renk tercihleri
+            {t('settings.appearanceComingSoon')}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -407,6 +459,148 @@ function NotificationRulesCard() {
               </div>
             ))}
           </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
+function PushNotificationsCard() {
+  const [isSupported, setIsSupported] = useState(false)
+  const [permission, setPermission] = useState<NotificationPermission>('default')
+  const [isSubscribed, setIsSubscribed] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    // Check if push notifications are supported
+    const supported = 'serviceWorker' in navigator && 
+      'PushManager' in window &&
+      'Notification' in window
+    
+    setIsSupported(supported)
+
+    if (supported) {
+      setPermission(Notification.permission)
+      
+      // Check subscription status
+      navigator.serviceWorker.ready.then(async (registration) => {
+        const subscription = await registration.pushManager.getSubscription()
+        setIsSubscribed(!!subscription)
+      })
+    }
+  }, [])
+
+  const handleToggle = async (enabled: boolean) => {
+    if (!isSupported) return
+    
+    setLoading(true)
+    
+    try {
+      if (enabled) {
+        // Request permission and subscribe
+        const permission = await Notification.requestPermission()
+        setPermission(permission)
+        
+        if (permission === 'granted') {
+          // Register service worker
+          await navigator.serviceWorker.register('/sw.js')
+          
+          // For now, just show local notifications (no server push)
+          setIsSubscribed(true)
+          toast.success('Bildirimler etkinleştirildi')
+        } else {
+          toast.error('Bildirim izni reddedildi')
+        }
+      } else {
+        // Unsubscribe
+        const registration = await navigator.serviceWorker.ready
+        const subscription = await registration.pushManager.getSubscription()
+        if (subscription) {
+          await subscription.unsubscribe()
+        }
+        setIsSubscribed(false)
+        toast.success('Bildirimler devre dışı bırakıldı')
+      }
+    } catch (error) {
+      console.error('Push notification error:', error)
+      toast.error('Bir hata oluştu')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const sendTestNotification = async () => {
+    if (permission !== 'granted') {
+      toast.error('Önce bildirimleri etkinleştirin')
+      return
+    }
+
+    try {
+      const registration = await navigator.serviceWorker.ready
+      await registration.showNotification('MergenFlow Test', {
+        body: 'Bildirimler düzgün çalışıyor! 🎉',
+        icon: '/icon-192.png',
+        badge: '/icon-192.png',
+        tag: 'test-notification',
+      })
+      toast.success('Test bildirimi gönderildi')
+    } catch (error) {
+      toast.error('Bildirim gönderilemedi')
+    }
+  }
+
+  if (!isSupported) {
+    return (
+      <Card className="opacity-60">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Smartphone className="h-5 w-5" />
+            Push Bildirimleri
+          </CardTitle>
+          <CardDescription>
+            Bu tarayıcı push bildirimlerini desteklemiyor
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    )
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Smartphone className="h-5 w-5" />
+          Push Bildirimleri
+        </CardTitle>
+        <CardDescription>
+          Önemli hatırlatmalar için tarayıcı bildirimleri alın
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label>Bildirimleri Etkinleştir</Label>
+            <p className="text-sm text-muted-foreground">
+              Ödeme, görev ve proje tarihleri için bildirim alın
+            </p>
+          </div>
+          <Switch
+            checked={isSubscribed}
+            onCheckedChange={handleToggle}
+            disabled={loading || permission === 'denied'}
+          />
+        </div>
+
+        {permission === 'denied' && (
+          <p className="text-sm text-destructive">
+            Bildirim izni reddedilmiş. Tarayıcı ayarlarından izin verin.
+          </p>
+        )}
+
+        {isSubscribed && (
+          <Button variant="outline" onClick={sendTestNotification}>
+            Test Bildirimi Gönder
+          </Button>
         )}
       </CardContent>
     </Card>

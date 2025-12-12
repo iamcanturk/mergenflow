@@ -1,15 +1,17 @@
 'use client'
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState, useEffect } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useCreateAsset, useUpdateAsset } from '@/hooks/use-assets'
 import { Asset } from '@/types'
 import { ASSET_TYPES, CURRENCIES } from '@/lib/constants'
+import { useTranslation } from '@/lib/i18n'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Dialog,
   DialogContent,
@@ -21,6 +23,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -36,9 +39,13 @@ import {
 
 const assetSchema = z.object({
   type: z.enum(['cash', 'bank', 'gold', 'stock', 'crypto']),
-  name: z.string().min(2, 'İsim en az 2 karakter olmalı'),
-  amount: z.number().min(0, 'Tutar negatif olamaz'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  quantity: z.number().optional().nullable(),
+  unit_price: z.number().optional().nullable(),
+  amount: z.number().min(0, 'Amount cannot be negative'),
   currency: z.enum(['TRY', 'USD', 'EUR']),
+  purchase_date: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
 })
 
 type AssetFormData = z.infer<typeof assetSchema>
@@ -51,6 +58,7 @@ interface AssetFormDialogProps {
 
 export function AssetFormDialog({ open, onOpenChange, asset }: AssetFormDialogProps) {
   const [loading, setLoading] = useState(false)
+  const { t } = useTranslation()
   const createAsset = useCreateAsset()
   const updateAsset = useUpdateAsset()
   const isEditing = !!asset
@@ -60,38 +68,72 @@ export function AssetFormDialog({ open, onOpenChange, asset }: AssetFormDialogPr
     defaultValues: {
       type: asset?.type || 'bank',
       name: asset?.name || '',
+      quantity: asset?.quantity || null,
+      unit_price: asset?.unit_price || null,
       amount: asset?.amount || 0,
       currency: asset?.currency || 'TRY',
+      purchase_date: asset?.purchase_date || null,
+      notes: asset?.notes || null,
     },
   })
 
+  const assetType = useWatch({ control: form.control, name: 'type' })
+  const quantity = useWatch({ control: form.control, name: 'quantity' })
+  const unitPrice = useWatch({ control: form.control, name: 'unit_price' })
+  
+  // Asset types that support quantity × unit_price calculation
+  const supportsQuantity = ['gold', 'stock', 'crypto'].includes(assetType)
+
+  // Auto-calculate amount when quantity or unit_price changes
+  useEffect(() => {
+    if (supportsQuantity && quantity && unitPrice) {
+      form.setValue('amount', quantity * unitPrice)
+    }
+  }, [quantity, unitPrice, supportsQuantity, form])
+
   // Form değerlerini asset değiştiğinde güncelle
-  if (asset && form.getValues('name') !== asset.name) {
-    form.reset({
-      type: asset.type,
-      name: asset.name,
-      amount: asset.amount,
-      currency: asset.currency,
-    })
-  }
+  useEffect(() => {
+    if (asset) {
+      form.reset({
+        type: asset.type,
+        name: asset.name,
+        quantity: asset.quantity,
+        unit_price: asset.unit_price,
+        amount: asset.amount,
+        currency: asset.currency,
+        purchase_date: asset.purchase_date,
+        notes: asset.notes,
+      })
+    }
+  }, [asset, form])
 
   const onSubmit = async (data: AssetFormData) => {
     setLoading(true)
     try {
+      const submitData = {
+        ...data,
+        quantity: supportsQuantity ? data.quantity : null,
+        unit_price: supportsQuantity ? data.unit_price : null,
+      }
+      
       if (isEditing && asset) {
         await updateAsset.mutateAsync({
           id: asset.id,
-          ...data,
+          ...submitData,
         })
       } else {
-        await createAsset.mutateAsync(data)
+        await createAsset.mutateAsync(submitData)
       }
       onOpenChange(false)
       form.reset({
         type: 'bank',
         name: '',
+        quantity: null,
+        unit_price: null,
         amount: 0,
         currency: 'TRY',
+        purchase_date: null,
+        notes: null,
       })
     } catch (error) {
       console.error('Asset operation failed:', error)
@@ -100,17 +142,26 @@ export function AssetFormDialog({ open, onOpenChange, asset }: AssetFormDialogPr
     }
   }
 
+  const getUnitLabel = () => {
+    switch (assetType) {
+      case 'gold': return t('assets.units.gram')
+      case 'stock': return t('assets.units.shares')
+      case 'crypto': return t('assets.units.coins')
+      default: return t('assets.units.units')
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[450px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? 'Varlığı Düzenle' : 'Yeni Varlık'}
+            {isEditing ? t('assets.editAsset') : t('assets.addAsset')}
           </DialogTitle>
           <DialogDescription>
             {isEditing
-              ? 'Varlık bilgilerini güncelleyin.'
-              : 'Yeni bir varlık ekleyin.'}
+              ? t('assets.editDescription')
+              : t('assets.addDescription')}
           </DialogDescription>
         </DialogHeader>
 
@@ -121,11 +172,11 @@ export function AssetFormDialog({ open, onOpenChange, asset }: AssetFormDialogPr
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tür *</FormLabel>
+                  <FormLabel>{t('assets.type')} *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Tür seçin" />
+                        <SelectValue placeholder={t('assets.selectType')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -149,14 +200,65 @@ export function AssetFormDialog({ open, onOpenChange, asset }: AssetFormDialogPr
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>İsim *</FormLabel>
+                  <FormLabel>{t('assets.name')} *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Örn: Ziraat Bankası, Bitcoin" {...field} />
+                    <Input placeholder={t('assets.namePlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {supportsQuantity && (
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="quantity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('assets.quantity')} ({getUnitLabel()})</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.001"
+                          placeholder="0"
+                          {...field}
+                          value={field.value ?? ''}
+                          onChange={(e) => field.onChange(parseFloat(e.target.value) || null)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="unit_price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('assets.unitPrice')}</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          placeholder="0.00"
+                          {...field}
+                          value={field.value ?? ''}
+                          onChange={(e) => field.onChange(parseFloat(e.target.value) || null)}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {t('assets.currentPricePerUnit')}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
               <FormField
@@ -164,17 +266,28 @@ export function AssetFormDialog({ open, onOpenChange, asset }: AssetFormDialogPr
                 name="amount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tutar *</FormLabel>
+                    <FormLabel>
+                      {supportsQuantity ? t('assets.totalValue') : t('assets.amount')} *
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="0"
                         step="0.01"
                         placeholder="0.00"
+                        readOnly={supportsQuantity && !!quantity && !!unitPrice}
+                        className={supportsQuantity && quantity && unitPrice ? 'bg-muted' : ''}
                         {...field}
                         onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                       />
                     </FormControl>
+                    {supportsQuantity && (
+                      <FormDescription>
+                        {quantity && unitPrice
+                          ? t('assets.calculatedFromQuantity')
+                          : t('assets.enterManuallyOrUseQuantity')}
+                      </FormDescription>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -185,11 +298,11 @@ export function AssetFormDialog({ open, onOpenChange, asset }: AssetFormDialogPr
                 name="currency"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Para Birimi *</FormLabel>
+                    <FormLabel>{t('common.currency')} *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Seçin" />
+                          <SelectValue placeholder={t('common.select')} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -206,16 +319,54 @@ export function AssetFormDialog({ open, onOpenChange, asset }: AssetFormDialogPr
               />
             </div>
 
+            <FormField
+              control={form.control}
+              name="purchase_date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('assets.purchaseDate')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(e) => field.onChange(e.target.value || null)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('common.notes')}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder={t('assets.notesPlaceholder')}
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(e) => field.onChange(e.target.value || null)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                İptal
+                {t('common.cancel')}
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? 'Kaydediliyor...' : isEditing ? 'Güncelle' : 'Ekle'}
+                {loading ? t('common.loading') : isEditing ? t('common.save') : t('common.add')}
               </Button>
             </DialogFooter>
           </form>

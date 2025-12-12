@@ -1,16 +1,28 @@
 'use client'
 
 import { useDebtAnalysis } from '@/hooks/use-projections'
+import { useTranslation } from '@/lib/i18n'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AlertCircle, Calendar, CreditCard, TrendingDown, CheckCircle2 } from 'lucide-react'
 import { format, differenceInDays } from 'date-fns'
-import { tr } from 'date-fns/locale'
+import { tr, enUS } from 'date-fns/locale'
 
 export function DebtAnalysisCard() {
+  const { t, locale } = useTranslation()
   const { data: analysis, isLoading, error } = useDebtAnalysis()
+
+  const dateLocale = locale === 'tr' ? tr : enUS
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {
+      style: 'currency',
+      currency: 'TRY',
+      maximumFractionDigits: 0,
+    }).format(value)
+  }
 
   if (isLoading) {
     return (
@@ -18,7 +30,7 @@ export function DebtAnalysisCard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
-            Borç Analizi
+            {t('projections.debt.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -37,13 +49,13 @@ export function DebtAnalysisCard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
-            Borç Analizi
+            {t('projections.debt.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-2 text-destructive">
             <AlertCircle className="h-4 w-4" />
-            <span>Yüklenirken hata oluştu</span>
+            <span>{t('projections.debt.loadError')}</span>
           </div>
         </CardContent>
       </Card>
@@ -57,21 +69,21 @@ export function DebtAnalysisCard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
-            Borç Analizi
+            {t('projections.debt.title')}
           </CardTitle>
           <CardDescription>
-            Krediler ve taksitli borçların analizi
+            {t('projections.debt.description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <CheckCircle2 className="h-12 w-12 text-green-500 mb-3" />
-            <h3 className="font-semibold text-lg">Tebrikler!</h3>
+            <h3 className="font-semibold text-lg">{t('projections.debt.congratulations')}</h3>
             <p className="text-muted-foreground">
-              Aktif borcunuz bulunmuyor.
+              {t('projections.debt.noDebt')}
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              Bitiş tarihi olan gider ekleyerek borç takibi yapabilirsiniz.
+              {t('projections.debt.addDebtHint')}
             </p>
           </div>
         </CardContent>
@@ -86,10 +98,10 @@ export function DebtAnalysisCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CreditCard className="h-5 w-5" />
-          Borç Analizi
+          {t('projections.debt.title')}
         </CardTitle>
         <CardDescription>
-          Krediler ve taksitli borçların analizi
+          {t('projections.debt.description')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -98,34 +110,34 @@ export function DebtAnalysisCard() {
           <div className="rounded-lg border p-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <TrendingDown className="h-4 w-4" />
-              Toplam Kalan Borç
+              {t('projections.debt.totalRemaining')}
             </div>
             <div className="mt-2 text-2xl font-bold text-red-600">
-              ₺{analysis.totalDebt.toLocaleString('tr-TR')}
+              {formatCurrency(analysis.totalDebt)}
             </div>
           </div>
           <div className="rounded-lg border p-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CreditCard className="h-4 w-4" />
-              Aylık Toplam Ödeme
+              {t('projections.debt.monthlyTotal')}
             </div>
             <div className="mt-2 text-2xl font-bold">
-              ₺{analysis.monthlyPayment.toLocaleString('tr-TR')}
+              {formatCurrency(analysis.monthlyPayment)}
             </div>
           </div>
           <div className="rounded-lg border p-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="h-4 w-4" />
-              Borçsuz Olma Tarihi
+              {t('projections.debt.debtFreeDate')}
             </div>
             <div className="mt-2 text-2xl font-bold text-green-600">
               {analysis.debtFreeDate
-                ? format(analysis.debtFreeDate, 'MMMM yyyy', { locale: tr })
+                ? format(analysis.debtFreeDate, 'MMMM yyyy', { locale: dateLocale })
                 : '-'}
             </div>
             {analysis.monthsToPayoff && (
               <div className="text-sm text-muted-foreground">
-                {analysis.monthsToPayoff} ay kaldı
+                {t('projections.debt.monthsRemaining').replace('{count}', analysis.monthsToPayoff.toString())}
               </div>
             )}
           </div>
@@ -133,7 +145,7 @@ export function DebtAnalysisCard() {
 
         {/* Individual Debts */}
         <div className="space-y-3">
-          <h4 className="font-medium">Aktif Borçlar</h4>
+          <h4 className="font-medium">{t('projections.debt.activeDebts')}</h4>
           {analysis.debts.map((debt, index) => {
             // Calculate progress (how much time has passed)
             const totalDays = debt.endDate 
@@ -150,24 +162,24 @@ export function DebtAnalysisCard() {
                   <div>
                     <h5 className="font-medium">{debt.name}</h5>
                     <p className="text-sm text-muted-foreground">
-                      Kalan: ₺{debt.amount.toLocaleString('tr-TR')}
+                      {t('projections.debt.remaining')}: {formatCurrency(debt.amount)}
                     </p>
                   </div>
                   <div className="text-right">
                     <Badge variant="outline">
-                      ₺{debt.monthlyPayment.toLocaleString('tr-TR')}/ay
+                      {formatCurrency(debt.monthlyPayment)}{t('projections.debt.perMonth')}
                     </Badge>
                     {debt.endDate && (
                       <p className="text-xs text-muted-foreground mt-1">
-                        Bitiş: {format(debt.endDate, 'd MMM yyyy', { locale: tr })}
+                        {t('projections.debt.endsOn')}: {format(debt.endDate, 'd MMM yyyy', { locale: dateLocale })}
                       </p>
                     )}
                   </div>
                 </div>
                 <div className="space-y-1">
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>{Math.round(progress)}% ödendi</span>
-                    <span>{debt.monthsRemaining} ay kaldı</span>
+                    <span>{t('projections.debt.percentPaid').replace('{percent}', Math.round(progress).toString())}</span>
+                    <span>{t('projections.debt.monthsRemaining').replace('{count}', (debt.monthsRemaining || 0).toString())}</span>
                   </div>
                   <Progress value={progress} className="h-2" />
                 </div>

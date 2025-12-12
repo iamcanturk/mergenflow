@@ -13,10 +13,16 @@ import {
   Settings,
   LogOut,
   Shield,
+  Calendar,
+  Timer,
+  BarChart3,
+  Target,
+  Calculator,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { useTranslation } from '@/lib/i18n'
 
 import {
   Sidebar,
@@ -33,43 +39,68 @@ import {
 
 const mainNavItems = [
   {
-    title: 'Dashboard',
+    titleKey: 'nav.dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
   },
   {
-    title: 'Müşteriler',
+    titleKey: 'nav.clients',
     href: '/dashboard/clients',
     icon: Users,
   },
   {
-    title: 'Projeler',
+    titleKey: 'nav.projects',
     href: '/dashboard/projects',
     icon: FolderKanban,
   },
   {
-    title: 'İşlemler',
+    titleKey: 'nav.transactions',
     href: '/dashboard/transactions',
     icon: Receipt,
+  },
+  {
+    titleKey: 'nav.calendar',
+    href: '/dashboard/calendar',
+    icon: Calendar,
+  },
+  {
+    titleKey: 'nav.timeTracking',
+    href: '/dashboard/time-tracking',
+    icon: Timer,
   },
 ]
 
 const financeNavItems = [
   {
-    title: 'Varlıklar',
+    titleKey: 'nav.assets',
     href: '/dashboard/assets',
     icon: Wallet,
   },
   {
-    title: 'Projeksiyon',
+    titleKey: 'nav.projections',
     href: '/dashboard/projections',
     icon: LineChart,
+  },
+  {
+    titleKey: 'nav.reports',
+    href: '/dashboard/reports',
+    icon: BarChart3,
+  },
+  {
+    titleKey: 'nav.goals',
+    href: '/dashboard/goals',
+    icon: Target,
+  },
+  {
+    titleKey: 'pricing.calculator',
+    href: '/dashboard/pricing',
+    icon: Calculator,
   },
 ]
 
 const settingsNavItems = [
   {
-    title: 'Ayarlar',
+    titleKey: 'nav.settings',
     href: '/dashboard/settings',
     icon: Settings,
   },
@@ -78,6 +109,7 @@ const settingsNavItems = [
 export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
+  const { t } = useTranslation()
   const supabase = createClient()
   const [isAdmin, setIsAdmin] = useState(false)
 
@@ -123,7 +155,7 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Freelance</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('nav.freelance')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainNavItems.map((item) => (
@@ -134,7 +166,7 @@ export function AppSidebar() {
                   >
                     <Link href={item.href}>
                       <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
+                      <span>{t(item.titleKey)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -144,7 +176,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Finans</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('nav.finance')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {financeNavItems.map((item) => (
@@ -155,7 +187,7 @@ export function AppSidebar() {
                   >
                     <Link href={item.href}>
                       <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
+                      <span>{t(item.titleKey)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -165,7 +197,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Sistem</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('nav.system')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {settingsNavItems.map((item) => (
@@ -176,7 +208,7 @@ export function AppSidebar() {
                   >
                     <Link href={item.href}>
                       <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
+                      <span>{t(item.titleKey)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -189,7 +221,7 @@ export function AppSidebar() {
                   >
                     <Link href="/admin">
                       <Shield className="h-4 w-4" />
-                      <span>Admin Panel</span>
+                      <span>{t('nav.admin')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -204,7 +236,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton onClick={handleLogout}>
               <LogOut className="h-4 w-4" />
-              <span>Çıkış Yap</span>
+              <span>{t('auth.logout')}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

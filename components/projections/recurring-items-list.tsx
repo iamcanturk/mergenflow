@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { useRecurringItems } from '@/hooks/use-projections'
 import { useDeleteRecurringItem } from '@/hooks/use-recurring-items'
+import { useTranslation } from '@/lib/i18n'
 import { format } from 'date-fns'
-import { tr } from 'date-fns/locale'
+import { tr, enUS } from 'date-fns/locale'
 import { Pencil, Trash2, MoreHorizontal, ArrowUpCircle, ArrowDownCircle, CalendarDays } from 'lucide-react'
 
 import {
@@ -47,6 +48,7 @@ interface RecurringItem {
 }
 
 export function RecurringItemsList() {
+  const { t, locale } = useTranslation()
   const { data: items, isLoading } = useRecurringItems()
   const deleteItem = useDeleteRecurringItem()
 
@@ -55,6 +57,16 @@ export function RecurringItemsList() {
   const [editingItem, setEditingItem] = useState<RecurringItem | null>(null)
   const [deletingItem, setDeletingItem] = useState<RecurringItem | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
+
+  const dateLocale = locale === 'tr' ? tr : enUS
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {
+      style: 'currency',
+      currency: 'TRY',
+      maximumFractionDigits: 0,
+    }).format(value)
+  }
 
   const handleEdit = (item: RecurringItem) => {
     setEditingItem(item)
@@ -95,9 +107,9 @@ export function RecurringItemsList() {
     return (
       <div className="text-center py-8">
         <CalendarDays className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
-        <p className="text-muted-foreground">Henüz tekrarlayan kalem yok.</p>
+        <p className="text-muted-foreground">{t('projections.recurring.noItems')}</p>
         <p className="text-sm text-muted-foreground mt-1">
-          Maaş, kira gibi düzenli gelir ve giderlerinizi ekleyin.
+          {t('projections.recurring.addDescription')}
         </p>
       </div>
     )
@@ -123,39 +135,39 @@ export function RecurringItemsList() {
   return (
     <>
       <div className="space-y-4">
-        {/* Özet */}
+        {/* Summary */}
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950">
-            <p className="text-muted-foreground">Aylık Gelir</p>
+            <p className="text-muted-foreground">{t('projections.recurring.monthlyIncome')}</p>
             <p className="text-lg font-semibold text-green-600">
-              +₺{totalMonthlyIncome.toLocaleString('tr-TR', { maximumFractionDigits: 0 })}
+              +{formatCurrency(totalMonthlyIncome)}
             </p>
           </div>
           <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950">
-            <p className="text-muted-foreground">Aylık Gider</p>
+            <p className="text-muted-foreground">{t('projections.recurring.monthlyExpense')}</p>
             <p className="text-lg font-semibold text-red-600">
-              -₺{totalMonthlyExpense.toLocaleString('tr-TR', { maximumFractionDigits: 0 })}
+              -{formatCurrency(totalMonthlyExpense)}
             </p>
           </div>
           <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-950">
-            <p className="text-muted-foreground">Aylık Net</p>
+            <p className="text-muted-foreground">{t('projections.recurring.monthlyNet')}</p>
             <p className={`text-lg font-semibold ${totalMonthlyIncome - totalMonthlyExpense >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               {totalMonthlyIncome - totalMonthlyExpense >= 0 ? '+' : ''}
-              ₺{(totalMonthlyIncome - totalMonthlyExpense).toLocaleString('tr-TR', { maximumFractionDigits: 0 })}
+              {formatCurrency(totalMonthlyIncome - totalMonthlyExpense)}
             </p>
           </div>
         </div>
 
-        {/* Tablo */}
+        {/* Table */}
         <div className="rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Tür</TableHead>
-                <TableHead>İsim</TableHead>
-                <TableHead>Sıklık</TableHead>
-                <TableHead className="text-right">Tutar</TableHead>
-                <TableHead>Tarih Aralığı</TableHead>
+                <TableHead>{t('projections.recurring.type')}</TableHead>
+                <TableHead>{t('projections.recurring.name')}</TableHead>
+                <TableHead>{t('projections.recurring.frequency')}</TableHead>
+                <TableHead className="text-right">{t('projections.recurring.amount')}</TableHead>
+                <TableHead>{t('projections.recurring.dateRange')}</TableHead>
                 <TableHead className="w-[80px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -170,28 +182,28 @@ export function RecurringItemsList() {
                         <ArrowDownCircle className="h-4 w-4 text-red-600" />
                       )}
                       <span className={item.type === 'income' ? 'text-green-600' : 'text-red-600'}>
-                        {item.type === 'income' ? 'Gelir' : 'Gider'}
+                        {item.type === 'income' ? t('transactions.income') : t('transactions.expense')}
                       </span>
                     </div>
                   </TableCell>
                   <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>
                     <Badge variant="outline">
-                      {item.frequency === 'monthly' ? 'Aylık' : 'Yıllık'}
+                      {item.frequency === 'monthly' ? t('projections.frequency.monthly') : t('projections.frequency.yearly')}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right font-medium">
                     <span className={item.type === 'income' ? 'text-green-600' : 'text-red-600'}>
                       {item.type === 'income' ? '+' : '-'}
-                      ₺{item.amount.toLocaleString('tr-TR')}
+                      {formatCurrency(item.amount)}
                     </span>
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {format(new Date(item.start_date), 'd MMM yyyy', { locale: tr })}
+                    {format(new Date(item.start_date), 'd MMM yyyy', { locale: dateLocale })}
                     {item.end_date && (
-                      <> - {format(new Date(item.end_date), 'd MMM yyyy', { locale: tr })}</>
+                      <> - {format(new Date(item.end_date), 'd MMM yyyy', { locale: dateLocale })}</>
                     )}
-                    {!item.end_date && ' - Süresiz'}
+                    {!item.end_date && ` - ${t('projections.recurring.indefinite')}`}
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
@@ -203,14 +215,14 @@ export function RecurringItemsList() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleEdit(item)}>
                           <Pencil className="h-4 w-4 mr-2" />
-                          Düzenle
+                          {t('common.edit')}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleDelete(item)}
                           className="text-destructive"
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          Sil
+                          {t('common.delete')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -234,20 +246,19 @@ export function RecurringItemsList() {
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Kalemi Sil</AlertDialogTitle>
+            <AlertDialogTitle>{t('projections.recurring.deleteTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              <strong>&quot;{deletingItem?.name}&quot;</strong> kalemini silmek istediğinize
-              emin misiniz? Bu işlem geri alınamaz.
+              {t('projections.recurring.deleteConfirm').replace('{name}', deletingItem?.name || '')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteLoading}>İptal</AlertDialogCancel>
+            <AlertDialogCancel disabled={deleteLoading}>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
               disabled={deleteLoading}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {deleteLoading ? 'Siliniyor...' : 'Sil'}
+              {deleteLoading ? t('projections.recurring.deleting') : t('common.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

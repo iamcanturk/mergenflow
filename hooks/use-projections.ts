@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 interface ProjectionSettings {
   inflationRate: number
   salaryIncreaseRate: number
+  defaultCurrency?: 'TRY' | 'USD' | 'EUR'
 }
 
 interface RecurringItem {
@@ -30,6 +31,7 @@ interface ProjectionData {
 interface UserSettingsData {
   inflation_rate: number
   salary_increase_rate: number
+  default_currency?: 'TRY' | 'USD' | 'EUR'
 }
 
 export function useUserSettings() {
@@ -51,10 +53,11 @@ export function useUserSettings() {
 
       const settingsData = data as UserSettingsData | null
 
-      // Varsayılan değerler
+      // Default values
       return {
-        inflationRate: settingsData?.inflation_rate || 25, // %25 enflasyon
-        salaryIncreaseRate: settingsData?.salary_increase_rate || 15, // %15 maaş artışı
+        inflationRate: settingsData?.inflation_rate || 25,
+        salaryIncreaseRate: settingsData?.salary_increase_rate || 15,
+        defaultCurrency: settingsData?.default_currency || 'TRY',
       } as ProjectionSettings
     },
   })

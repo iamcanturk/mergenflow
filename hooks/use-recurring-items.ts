@@ -87,17 +87,27 @@ export function useUpdateUserSettings() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (input: { inflationRate: number; salaryIncreaseRate: number }) => {
+    mutationFn: async (input: { 
+      inflationRate: number
+      salaryIncreaseRate: number
+      defaultCurrency?: 'TRY' | 'USD' | 'EUR'
+    }) => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      const { error } = await supabase
+      const updateData: Record<string, any> = {
+        inflation_rate: input.inflationRate,
+        salary_increase_rate: input.salaryIncreaseRate,
+      }
+      
+      if (input.defaultCurrency) {
+        updateData.default_currency = input.defaultCurrency
+      }
+
+      const { error } = await (supabase as any)
         .from('user_settings')
-        .upsert({
-          user_id: user.id,
-          inflation_rate: input.inflationRate,
-          salary_increase_rate: input.salaryIncreaseRate,
-        } as never)
+        .update(updateData)
+        .eq('user_id', user.id)
 
       if (error) throw error
       return input

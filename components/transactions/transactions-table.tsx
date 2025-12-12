@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { format } from 'date-fns'
-import { tr } from 'date-fns/locale'
+import { tr, enUS } from 'date-fns/locale'
 import { Transaction } from '@/types'
 import { useTransactions, useToggleTransactionPaid, useDeleteTransaction } from '@/hooks/use-transactions'
+import { useTranslation } from '@/lib/i18n'
 import { Pencil, Trash2, MoreHorizontal, ArrowUpCircle, ArrowDownCircle, CheckCircle2, Circle } from 'lucide-react'
 
 import {
@@ -32,6 +33,7 @@ interface TransactionWithProject extends Transaction {
 }
 
 export function TransactionsTable() {
+  const { t, locale } = useTranslation()
   const { data: transactions, isLoading } = useTransactions()
   const togglePaid = useToggleTransactionPaid()
   const deleteTransaction = useDeleteTransaction()
@@ -41,6 +43,16 @@ export function TransactionsTable() {
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null)
   const [deletingTransaction, setDeletingTransaction] = useState<Transaction | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
+
+  const dateLocale = locale === 'tr' ? tr : enUS
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {
+      style: 'currency',
+      currency: 'TRY',
+      maximumFractionDigits: 0,
+    }).format(value)
+  }
 
   const handleEdit = (transaction: Transaction) => {
     setEditingTransaction(transaction)
@@ -91,10 +103,7 @@ export function TransactionsTable() {
   if (!transactions || transactions.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Henüz işlem bulunmuyor.</p>
-        <p className="text-sm text-muted-foreground mt-1">
-          Yeni bir gelir veya gider ekleyin.
-        </p>
+        <p className="text-muted-foreground">{t('transactions.noTransactions')}</p>
       </div>
     )
   }
@@ -105,12 +114,12 @@ export function TransactionsTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Tür</TableHead>
-              <TableHead>Açıklama</TableHead>
-              <TableHead>Proje</TableHead>
-              <TableHead>Tarih</TableHead>
-              <TableHead className="text-right">Tutar</TableHead>
-              <TableHead className="w-[100px]">Durum</TableHead>
+              <TableHead className="w-[100px]">{t('transactions.type')}</TableHead>
+              <TableHead>{t('transactions.description')}</TableHead>
+              <TableHead>{t('transactions.project')}</TableHead>
+              <TableHead>{t('transactions.date')}</TableHead>
+              <TableHead className="text-right">{t('transactions.amount')}</TableHead>
+              <TableHead className="w-[100px]">{t('projects.status')}</TableHead>
               <TableHead className="w-[80px]"></TableHead>
             </TableRow>
           </TableHeader>
@@ -125,7 +134,7 @@ export function TransactionsTable() {
                       <ArrowDownCircle className="h-4 w-4 text-red-600" />
                     )}
                     <span className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}>
-                      {transaction.type === 'income' ? 'Gelir' : 'Gider'}
+                      {transaction.type === 'income' ? t('transactions.income') : t('transactions.expense')}
                     </span>
                   </div>
                 </TableCell>
@@ -142,12 +151,12 @@ export function TransactionsTable() {
                   )}
                 </TableCell>
                 <TableCell>
-                  {format(new Date(transaction.transaction_date), 'd MMMM yyyy', { locale: tr })}
+                  {format(new Date(transaction.transaction_date), 'd MMMM yyyy', { locale: dateLocale })}
                 </TableCell>
                 <TableCell className="text-right font-medium">
                   <span className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}>
                     {transaction.type === 'income' ? '+' : '-'}
-                    ₺{transaction.amount.toLocaleString('tr-TR')}
+                    {formatCurrency(transaction.amount)}
                   </span>
                 </TableCell>
                 <TableCell>
@@ -160,12 +169,12 @@ export function TransactionsTable() {
                     {transaction.is_paid ? (
                       <>
                         <CheckCircle2 className="h-4 w-4 text-green-600" />
-                        <span className="text-green-600">Ödendi</span>
+                        <span className="text-green-600">{t('dashboard.collected')}</span>
                       </>
                     ) : (
                       <>
                         <Circle className="h-4 w-4 text-orange-500" />
-                        <span className="text-orange-500">Bekliyor</span>
+                        <span className="text-orange-500">{t('dashboard.pending')}</span>
                       </>
                     )}
                   </Button>
@@ -180,14 +189,14 @@ export function TransactionsTable() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => handleEdit(transaction)}>
                         <Pencil className="h-4 w-4 mr-2" />
-                        Düzenle
+                        {t('common.edit')}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => handleDelete(transaction)}
                         className="text-destructive"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        Sil
+                        {t('common.delete')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

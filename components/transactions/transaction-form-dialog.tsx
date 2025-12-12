@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useCreateTransaction, useUpdateTransaction } from '@/hooks/use-transactions'
 import { useProjects } from '@/hooks/use-projects'
+import { useTranslation } from '@/lib/i18n'
 import { Transaction } from '@/types'
 
 import { Button } from '@/components/ui/button'
@@ -36,21 +37,16 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-const TRANSACTION_TYPES = {
-  income: { label: 'Gelir', color: 'text-green-600' },
-  expense: { label: 'Gider', color: 'text-red-600' },
-}
-
-const transactionSchema = z.object({
+const createTransactionSchema = (t: (key: string) => string) => z.object({
   type: z.enum(['income', 'expense']),
-  amount: z.number().positive('Tutar pozitif olmalı'),
-  transaction_date: z.string().min(1, 'Tarih zorunlu'),
+  amount: z.number().positive(t('transactions.amountValidation')),
+  transaction_date: z.string().min(1, t('transactions.dateRequired')),
   project_id: z.string().optional(),
   description: z.string().optional(),
   is_paid: z.boolean(),
 })
 
-type TransactionFormData = z.infer<typeof transactionSchema>
+type TransactionFormData = z.infer<ReturnType<typeof createTransactionSchema>>
 
 interface TransactionFormDialogProps {
   open: boolean
@@ -65,6 +61,7 @@ export function TransactionFormDialog({
   transaction,
   defaultType = 'income',
 }: TransactionFormDialogProps) {
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const createTransaction = useCreateTransaction()
   const updateTransaction = useUpdateTransaction()
@@ -72,6 +69,8 @@ export function TransactionFormDialog({
   const isEditing = !!transaction
 
   const today = new Date().toISOString().split('T')[0]
+
+  const transactionSchema = createTransactionSchema(t)
 
   const form = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema),
@@ -85,7 +84,7 @@ export function TransactionFormDialog({
     },
   })
 
-  // Form değerlerini transaction değiştiğinde güncelle
+  // Update form values when transaction changes
   if (transaction && form.getValues('amount') !== transaction.amount) {
     form.reset({
       type: transaction.type,
@@ -137,12 +136,12 @@ export function TransactionFormDialog({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? 'İşlemi Düzenle' : 'Yeni İşlem'}
+            {isEditing ? t('transactions.editTransaction') : t('transactions.addTransaction')}
           </DialogTitle>
           <DialogDescription>
             {isEditing
-              ? 'İşlem bilgilerini güncelleyin.'
-              : 'Yeni bir gelir veya gider ekleyin.'}
+              ? t('transactions.editDescription')
+              : t('transactions.addDescription')}
           </DialogDescription>
         </DialogHeader>
 
@@ -153,19 +152,16 @@ export function TransactionFormDialog({
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tür *</FormLabel>
+                  <FormLabel>{t('transactions.type')} *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Tür seçin" />
+                        <SelectValue placeholder={t('transactions.selectType')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.entries(TRANSACTION_TYPES).map(([value, { label }]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="income">{t('transactions.income')}</SelectItem>
+                      <SelectItem value="expense">{t('transactions.expense')}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -179,7 +175,7 @@ export function TransactionFormDialog({
                 name="amount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tutar *</FormLabel>
+                    <FormLabel>{t('transactions.amount')} *</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -200,7 +196,7 @@ export function TransactionFormDialog({
                 name="transaction_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tarih *</FormLabel>
+                    <FormLabel>{t('transactions.date')} *</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -215,15 +211,15 @@ export function TransactionFormDialog({
               name="project_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Proje (Opsiyonel)</FormLabel>
+                  <FormLabel>{t('transactions.project')}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Proje seçin" />
+                        <SelectValue placeholder={t('common.select')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">Proje yok</SelectItem>
+                      <SelectItem value="">{t('transactions.noProject')}</SelectItem>
                       {projects?.map((project) => (
                         <SelectItem key={project.id} value={project.id}>
                           {project.name}
@@ -241,10 +237,10 @@ export function TransactionFormDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Açıklama</FormLabel>
+                  <FormLabel>{t('transactions.description')}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="İşlem detayları..."
+                      placeholder={t('transactions.description')}
                       className="resize-none"
                       rows={2}
                       {...field}
@@ -268,12 +264,10 @@ export function TransactionFormDialog({
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>
-                      {transactionType === 'income' ? 'Ödeme Alındı' : 'Ödeme Yapıldı'}
+                      {t('transactions.paid')}
                     </FormLabel>
                     <p className="text-sm text-muted-foreground">
-                      {transactionType === 'income'
-                        ? 'Bu gelirin ödemesi alındı mı?'
-                        : 'Bu giderin ödemesi yapıldı mı?'}
+                      {t('transactions.markAsPaid')}
                     </p>
                   </div>
                 </FormItem>
@@ -286,10 +280,10 @@ export function TransactionFormDialog({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                İptal
+                {t('common.cancel')}
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? 'Kaydediliyor...' : isEditing ? 'Güncelle' : 'Ekle'}
+                {loading ? t('common.loading') : isEditing ? t('common.save') : t('common.add')}
               </Button>
             </DialogFooter>
           </form>

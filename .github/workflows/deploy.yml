@@ -1,0 +1,39 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Manuel tetikleme için
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to CloudPanel Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            echo "🚀 Starting deployment..."
+            
+            cd ~/htdocs/${{ secrets.SITE_DOMAIN }}
+            
+            echo "📦 Pulling latest changes..."
+            git pull origin main
+            
+            echo "📥 Installing dependencies..."
+            npm install --production=false
+            
+            echo "🔨 Building application..."
+            npm run build
+            
+            echo "🔄 Restarting application..."
+            pm2 restart all
+            
+            echo "✅ Deployment completed at $(date)"
+            echo "🌐 Site: https://${{ secrets.SITE_DOMAIN }}"

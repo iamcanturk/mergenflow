@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Asset } from '@/types'
 import { useAssets, useDeleteAsset } from '@/hooks/use-assets'
 import { ASSET_TYPES, CURRENCIES } from '@/lib/constants'
+import { useTranslation } from '@/lib/i18n'
 import { Pencil, Trash2, MoreHorizontal } from 'lucide-react'
 
 import {
@@ -23,12 +24,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { AssetFormDialog } from './asset-form-dialog'
 import { DeleteAssetDialog } from './delete-asset-dialog'
 
 export function AssetsTable() {
   const { data: assets, isLoading } = useAssets()
   const deleteAsset = useDeleteAsset()
+  const { t, locale } = useTranslation()
 
   const [formOpen, setFormOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -61,6 +68,22 @@ export function AssetsTable() {
     }
   }
 
+  const formatNumber = (value: number) => {
+    return value.toLocaleString(locale === 'tr' ? 'tr-TR' : 'en-US', { 
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
+  }
+
+  const getQuantityLabel = (type: string, quantity: number) => {
+    switch (type) {
+      case 'gold': return `${formatNumber(quantity)} ${t('assets.units.gram')}`
+      case 'stock': return `${formatNumber(quantity)} ${t('assets.units.shares')}`
+      case 'crypto': return `${formatNumber(quantity)} ${t('assets.units.coins')}`
+      default: return `${formatNumber(quantity)} ${t('assets.units.units')}`
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="space-y-3">
@@ -74,15 +97,12 @@ export function AssetsTable() {
   if (!assets || assets.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Henüz varlık bulunmuyor.</p>
-        <p className="text-sm text-muted-foreground mt-1">
-          Yeni bir varlık ekleyin.
-        </p>
+        <p className="text-muted-foreground">{t('assets.noAssets')}</p>
       </div>
     )
   }
 
-  // Varlıkları türe göre grupla
+  // Group assets by type
   const groupedAssets = assets.reduce((acc, asset) => {
     const type = asset.type
     if (!acc[type]) acc[type] = []
@@ -95,11 +115,13 @@ export function AssetsTable() {
       <div className="space-y-6">
         {Object.entries(groupedAssets).map(([type, typeAssets]) => {
           const assetType = ASSET_TYPES[type as keyof typeof ASSET_TYPES]
+          const supportsQuantity = ['gold', 'stock', 'crypto'].includes(type)
+          
           return (
             <div key={type} className="space-y-2">
               <h3 className="font-semibold flex items-center gap-2">
                 <span>{assetType?.icon}</span>
-                <span>{assetType?.label || type}</span>
+                <span>{t(`assets.types.${type}`)}</span>
                 <Badge variant="secondary" className="ml-2">
                   {typeAssets.length}
                 </Badge>
@@ -108,8 +130,14 @@ export function AssetsTable() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>İsim</TableHead>
-                      <TableHead className="text-right">Tutar</TableHead>
+                      <TableHead>{t('assets.name')}</TableHead>
+                      {supportsQuantity && (
+                        <TableHead className="text-right">{t('assets.quantity')}</TableHead>
+                      )}
+                      {supportsQuantity && (
+                        <TableHead className="text-right">{t('assets.unitPrice')}</TableHead>
+                      )}
+                      <TableHead className="text-right">{t('assets.totalValue')}</TableHead>
                       <TableHead className="w-[80px]"></TableHead>
                     </TableRow>
                   </TableHeader>
@@ -119,12 +147,40 @@ export function AssetsTable() {
                       return (
                         <TableRow key={asset.id}>
                           <TableCell className="font-medium">
-                            {asset.name}
+                            <div className="flex flex-col">
+                              <span>{asset.name}</span>
+                              {asset.purchase_date && (
+                                <span className="text-xs text-muted-foreground">
+                                  {new Date(asset.purchase_date).toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-US')}
+                                </span>
+                              )}
+                            </div>
                           </TableCell>
+                          {supportsQuantity && (
+                            <TableCell className="text-right">
+                              {asset.quantity ? getQuantityLabel(type, asset.quantity) : '-'}
+                            </TableCell>
+                          )}
+                          {supportsQuantity && (
+                            <TableCell className="text-right">
+                              {asset.unit_price ? (
+                                <span>{currency.symbol}{formatNumber(asset.unit_price)}</span>
+                              ) : '-'}
+                            </TableCell>
+                          )}
                           <TableCell className="text-right">
-                            <span className="font-semibold">
-                              {currency.symbol}{asset.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                            </span>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="font-semibold cursor-default">
+                                  {currency.symbol}{formatNumber(asset.amount)}
+                                </span>
+                              </TooltipTrigger>
+                              {asset.quantity && asset.unit_price && (
+                                <TooltipContent>
+                                  {getQuantityLabel(type, asset.quantity)} × {currency.symbol}{formatNumber(asset.unit_price)}
+                                </TooltipContent>
+                              )}
+                            </Tooltip>
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
@@ -136,14 +192,14 @@ export function AssetsTable() {
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem onClick={() => handleEdit(asset)}>
                                   <Pencil className="h-4 w-4 mr-2" />
-                                  Düzenle
+                                  {t('common.edit')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                   onClick={() => handleDelete(asset)}
                                   className="text-destructive"
                                 >
                                   <Trash2 className="h-4 w-4 mr-2" />
-                                  Sil
+                                  {t('common.delete')}
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>

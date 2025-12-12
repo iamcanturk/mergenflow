@@ -22,7 +22,10 @@
     "noData": "Veri bulunamadı",
     "error": "Bir hata oluştu",
     "success": "İşlem başarılı",
-    "required": "Bu alan zorunludur"
+    "required": "Bu alan zorunludur",
+    "currency": "Para Birimi",
+    "notes": "Notlar",
+    "select": "Seçin"
   },
   "auth": {
     "login": "Giriş Yap",
@@ -51,33 +54,51 @@
     "projections": "Projeksiyon",
     "settings": "Ayarlar",
     "admin": "Yönetim Paneli",
-    "profile": "Profil"
+    "profile": "Profil",
+    "notifications": "Bildirimler",
+    "freelance": "Freelance",
+    "finance": "Finans",
+    "system": "Sistem",
+    "calendar": "Takvim",
+    "timeTracking": "Zaman Takibi",
+    "reports": "Raporlar",
+    "goals": "Hedefler"
   },
   "landing": {
     "hero": {
       "title": "Freelance Kariyerinizin Kontrolünü Elinize Alın",
-      "subtitle": "Projelerinizi, müşterilerinizi ve finansmanınızı yönetmek için hepsi bir arada platform. Güçlü analizlerle daha akıllı kararlar verin.",
+      "titleLine1": "Freelance İşlerinizi",
+      "titleLine2": "Profesyonelce Yönetin",
+      "subtitle": "Müşterilerinizi, projelerinizi ve finanslarınızı tek bir platformda yönetin. Finansal özgürlüğe giden yolu görün.",
+      "badge": "Açık kaynak, %100 ücretsiz",
       "cta": "Ücretsiz Başla",
-      "login": "Giriş Yap"
+      "login": "Giriş Yap",
+      "github": "GitHub'da Görüntüle"
+    },
+    "stats": {
+      "users": "Aktif Kullanıcı",
+      "projects": "Yönetilen Proje",
+      "amount": "İşlenen Tutar",
+      "satisfaction": "Memnuniyet"
     },
     "features": {
-      "title": "İhtiyacınız Olan Her Şey",
-      "subtitle": "Freelancerlar için özel olarak tasarlanmış güçlü araçlar",
+      "title": "Tüm İhtiyaçlarınız Tek Platformda",
+      "subtitle": "Freelance çalışanlar için özel olarak tasarlanmış, güçlü ve kullanımı kolay araçlar",
       "projectManagement": {
         "title": "Proje Yönetimi",
-        "description": "Projelerinizi tekliften tamamlanmaya kadar sezgisel Kanban panosuyla takip edin."
+        "description": "Projelerinizi tekliften tamamlanmaya kadar detaylı takip edin. Bütçe ve deadline kontrolü."
       },
       "financialTracking": {
-        "title": "Finansal Takip",
-        "description": "Gelir, gider ve varlıklarınızı tek bir yerde gerçek zamanlı içgörülerle izleyin."
+        "title": "Gelir & Gider Takibi",
+        "description": "Tüm finansal işlemlerinizi kaydedin. Hakedişler, faturalar ve ödemeleri yönetin."
       },
       "clientCRM": {
-        "title": "Müşteri CRM",
-        "description": "Detaylı profiller ve proje geçmişi ile müşteri ilişkilerinizi yönetin."
+        "title": "Müşteri Yönetimi",
+        "description": "Müşterilerinizi tek bir yerden yönetin. İletişim bilgileri, projeler ve ödemeler."
       },
       "projections": {
         "title": "36 Aylık Projeksiyon",
-        "description": "Akıllı tahmin ve trend analizi ile finansal geleceğinizi görün."
+        "description": "Enflasyon ve gelir artışı hesaplamalarıyla finansal geleceğinizi öngörün."
       },
       "recurring": {
         "title": "Düzenli Ödemeler",
@@ -85,19 +106,54 @@
       },
       "notifications": {
         "title": "Akıllı Bildirimler",
-        "description": "Özelleştirilebilir hatırlatıcılar ve uyarılarla hiçbir son tarihi kaçırmayın."
+        "description": "Push bildirimleri ve e-posta hatırlatıcılarıyla hiçbir tarihi kaçırmayın."
+      },
+      "kanban": {
+        "title": "Kanban Board",
+        "description": "Sürükle-bırak ile görevlerinizi organize edin. Scrum ve Kanban metodolojileri."
+      },
+      "assets": {
+        "title": "Varlık Yönetimi",
+        "description": "Nakit, banka, altın, hisse ve kripto varlıklarınızı tek yerden takip edin."
+      },
+      "timeTracking": {
+        "title": "Zaman Takibi",
+        "description": "Projelerinize harcanan süreyi kaydedin, saatlik ücretlendirme yapın."
+      },
+      "goals": {
+        "title": "Hedef Takibi",
+        "description": "Gelir, proje ve tasarruf hedeflerinizi belirleyin, ilerlemenizi izleyin."
       }
     },
     "benefits": {
-      "title": "Freelancerlar Neden Bizi Seçiyor",
-      "free": "%100 Ücretsiz ve Açık Kaynak",
-      "secure": "Verileriniz Sizin Kalır",
-      "fast": "Yıldırım Hızında Performans"
+      "title": "Neden MergenFlow?",
+      "subtitle": "Freelance çalışanların en büyük sorunu finansal belirsizliktir. MergenFlow ile gelecekte nereye gideceğinizi görün.",
+      "months": "Ay",
+      "projection": "Finansal Projeksiyon",
+      "projectionDesc": "Enflasyon ve gelir artışı hesaplamalarıyla geleceğinizi planlayın",
+      "list": {
+        "professional": "Freelance işlerinizi profesyonelce yönetin",
+        "forecast": "Finansal hedeflerinize ne zaman ulaşacağınızı görün",
+        "secure": "Müşteri ve proje verileriniz güvende",
+        "mobile": "Mobil uyumlu, her yerden erişim",
+        "multilang": "Türkçe ve İngilizce dil desteği",
+        "budget": "Düzenli gelir/gider takibi ile bütçe planlaması",
+        "opensource": "Açık kaynak kodlu, topluluk destekli",
+        "free": "%100 ücretsiz, gizli maliyet yok"
+      }
+    },
+    "opensource": {
+      "badge": "Açık Kaynak",
+      "title": "Açık Kaynak ve Özgür",
+      "description": "MergenFlow tamamen açık kaynak kodludur. Kodu inceleyebilir, fork edebilir ve kendi sunucunuzda barındırabilirsiniz.",
+      "viewGithub": "GitHub'da Görüntüle",
+      "star": "Yıldız Ver"
     },
     "cta": {
-      "title": "Freelance İşinizi Dönüştürmeye Hazır mısınız?",
-      "subtitle": "Kariyerlerinin kontrolünü eline alan binlerce freelancera katılın.",
-      "button": "Bugün Ücretsiz Başla"
+      "title": "Hemen Başlayın",
+      "subtitle": "Ücretsiz hesap oluşturun ve freelance kariyerinizi bir üst seviyeye taşıyın.",
+      "button": "Ücretsiz Hesap Oluştur",
+      "noCreditCard": "Kredi kartı gerekmez"
     },
     "footer": {
       "rights": "Tüm hakları saklıdır.",
@@ -109,9 +165,17 @@
     "welcome": "Tekrar hoş geldiniz, {name}!",
     "overview": "Genel Bakış",
     "recentProjects": "Son Projeler",
+    "recentTransactions": "Son İşlemler",
     "upcomingTasks": "Yaklaşan Görevler",
     "financialSummary": "Finansal Özet",
     "quickActions": "Hızlı İşlemler",
+    "quickActionsDescription": "Sık kullanılan işlemlere hızlı erişim",
+    "pendingPayments": "Bekleyen Ödemeler",
+    "collected": "Tahsil edildi",
+    "pending": "Henüz tahsil edilmedi",
+    "unpaid": "Ödenmedi",
+    "projectionsDescription": "36 aylık projeksiyon ile finansal geleceğinizi görün",
+    "viewProjections": "Projeksiyon Görüntüle",
     "stats": {
       "totalIncome": "Toplam Gelir",
       "totalExpenses": "Toplam Gider",
@@ -152,7 +216,9 @@
     "currency": "Para Birimi",
     "tasks": "Görevler",
     "noProjects": "Henüz proje yok. İlk projenizi oluşturun!",
+    "noClient": "Müşteri yok",
     "deleteConfirm": "Bu projeyi silmek istediğinizden emin misiniz?",
+    "kanban": "Kanban",
     "statuses": {
       "proposal": "Teklif",
       "active": "Aktif",
@@ -197,7 +263,21 @@
     "income": "Gelir",
     "expense": "Gider",
     "noTransactions": "Henüz işlem yok. İlk işleminizi kaydedin!",
-    "deleteConfirm": "Bu işlemi silmek istediğinizden emin misiniz?"
+    "deleteConfirm": "Bu işlemi silmek istediğinizden emin misiniz?",
+    "editDescription": "İşlem bilgilerini güncelleyin.",
+    "addDescription": "Yeni bir gelir veya gider ekleyin.",
+    "selectType": "Tür seçin",
+    "noProject": "Proje yok",
+    "paid": "Ödendi",
+    "markAsPaid": "Ödendi olarak işaretle",
+    "deleteTitle": "İşlemi Sil",
+    "deleteMessage": "Bu {type} ({amount}) silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+    "incomeLabel": "geliri",
+    "expenseLabel": "gideri",
+    "deleting": "Siliniyor...",
+    "saving": "Kaydediliyor...",
+    "amountValidation": "Tutar pozitif olmalı",
+    "dateRequired": "Tarih zorunlu"
   },
   "assets": {
     "title": "Varlıklar",
@@ -205,10 +285,21 @@
     "editAsset": "Varlık Düzenle",
     "deleteAsset": "Varlık Sil",
     "name": "Varlık Adı",
+    "namePlaceholder": "Örn: Ziraat Bankası, Bitcoin",
     "type": "Tür",
+    "selectType": "Tür seçin",
     "amount": "Miktar",
     "currency": "Para Birimi",
     "totalValue": "Toplam Değer",
+    "quantity": "Adet/Miktar",
+    "unitPrice": "Birim Fiyat",
+    "currentPricePerUnit": "Güncel birim fiyatı",
+    "purchaseDate": "Alış Tarihi",
+    "notesPlaceholder": "Bu varlık hakkında ek notlar...",
+    "calculatedFromQuantity": "Adet × birim fiyattan hesaplandı",
+    "enterManuallyOrUseQuantity": "Manuel girin veya adet × birim fiyat kullanın",
+    "addDescription": "Portföyünüze yeni bir varlık ekleyin.",
+    "editDescription": "Varlık bilgilerini güncelleyin.",
     "noAssets": "Henüz varlık yok. İlk varlığınızı ekleyin!",
     "deleteConfirm": "Bu varlığı silmek istediğinizden emin misiniz?",
     "types": {
@@ -217,24 +308,110 @@
       "gold": "Altın",
       "stock": "Hisse Senedi",
       "crypto": "Kripto Para"
+    },
+    "units": {
+      "gram": "gram",
+      "shares": "adet",
+      "coins": "adet",
+      "units": "birim"
     }
   },
   "projections": {
     "title": "Finansal Projeksiyon",
+    "subtitle": "Finansal geleceğinizi planlayın",
     "monthlyOverview": "Aylık Genel Bakış",
     "projectedBalance": "Tahmini Bakiye",
     "recurringItems": "Düzenli Kalemler",
+    "recurringDescription": "Maaş, kira, abonelikler gibi düzenli kalemler",
     "addRecurring": "Düzenli Kalem Ekle",
-    "settings": "Projeksiyon Ayarları",
+    "settings": "Ayarlar",
+    "settingsTitle": "Projeksiyon Ayarları",
+    "settingsDescription": "Enflasyon ve maaş artış oranlarını ayarlayın.",
     "inflationRate": "Yıllık Enflasyon Oranı",
+    "inflationLabel": "Yıllık Enflasyon Oranı (%)",
+    "inflationHint": "Giderlerinize uygulanacak yıllık artış oranı",
     "salaryIncreaseRate": "Yıllık Zam Oranı",
+    "salaryLabel": "Yıllık Maaş Artış Oranı (%)",
+    "salaryHint": "Gelirlerinize uygulanacak yıllık artış oranı",
     "debtAnalysis": "Borç Ödeme Analizi",
     "debtFreeDate": "Borçsuz Olma Tarihi",
     "totalDebt": "Toplam Borç",
     "monthlyPayment": "Aylık Ödeme",
+    "currentAssets": "Mevcut Varlık",
+    "totalInCurrency": "{currency} cinsinden toplam",
+    "afterMonths": "{months} Ay Sonra",
+    "estimatedCumulative": "Tahmini birikimli varlık",
+    "inflation": "Enflasyon",
+    "annualExpenseIncrease": "Yıllık gider artışı",
+    "salaryIncrease": "Maaş Artışı",
+    "annualIncomeIncrease": "Yıllık gelir artışı",
+    "cumulativeProjection": "Birikimli Varlık Projeksiyonu",
+    "futureAssetDescription": "Gelecekteki tahmini varlık durumunuz",
+    "selectPeriod": "Süre seçin",
+    "months": "{count} Ay",
+    "years": "{count} Yıl",
+    "monthlyIncomeExpense": "Aylık Gelir & Gider Projeksiyonu",
+    "monthlyFlowDescription": "Enflasyon ve maaş artışı hesaba katılmış aylık akış",
+    "noProjectionData": "Projeksiyon için tekrarlayan gelir/gider ekleyin",
+    "chartView": "Grafik",
+    "tableView": "Tablo",
+    "month": "Ay",
+    "income": "Gelir",
+    "expense": "Gider",
+    "net": "Net",
+    "cumulative": "Kümülatif",
+    "saving": "Birikim",
+    "saving_plural": "Birikimler",
     "frequency": {
       "monthly": "Aylık",
       "yearly": "Yıllık"
+    },
+    "recurring": {
+      "title": "Tekrarlayan Gelir & Giderler",
+      "noItems": "Henüz tekrarlayan kalem yok.",
+      "addDescription": "Maaş, kira gibi düzenli gelir ve giderlerinizi ekleyin.",
+      "monthlyIncome": "Aylık Gelir",
+      "monthlyExpense": "Aylık Gider",
+      "monthlyNet": "Aylık Net",
+      "type": "Tür",
+      "name": "İsim",
+      "namePlaceholder": "Örn: Maaş, Kira, Netflix",
+      "frequency": "Sıklık",
+      "amount": "Tutar",
+      "dateRange": "Tarih Aralığı",
+      "startDate": "Başlangıç Tarihi",
+      "endDate": "Bitiş Tarihi",
+      "indefinite": "Süresiz",
+      "editTitle": "Tekrarlayan Kalem Düzenle",
+      "addTitle": "Yeni Tekrarlayan Kalem",
+      "editDescription": "Tekrarlayan gelir veya gider kalemini düzenleyin.",
+      "addItemDescription": "Maaş, kira gibi düzenli gelir veya gider ekleyin.",
+      "deleteTitle": "Kalemi Sil",
+      "deleteConfirm": "\"{name}\" kalemini silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+      "deleting": "Siliniyor...",
+      "selectType": "Tür seçin",
+      "selectFrequency": "Sıklık seçin",
+      "nameValidation": "İsim en az 2 karakter olmalı",
+      "amountValidation": "Tutar pozitif olmalı",
+      "startDateRequired": "Başlangıç tarihi zorunlu",
+      "update": "Güncelle"
+    },
+    "debt": {
+      "title": "Borç Analizi",
+      "description": "Krediler ve taksitli borçların analizi",
+      "loadError": "Yüklenirken hata oluştu",
+      "congratulations": "Tebrikler!",
+      "noDebt": "Aktif borcunuz bulunmuyor.",
+      "addDebtHint": "Bitiş tarihi olan gider ekleyerek borç takibi yapabilirsiniz.",
+      "totalRemaining": "Toplam Kalan Borç",
+      "monthlyTotal": "Aylık Toplam Ödeme",
+      "debtFreeDate": "Borçsuz Olma Tarihi",
+      "monthsRemaining": "{count} ay kaldı",
+      "activeDebts": "Aktif Borçlar",
+      "remaining": "Kalan",
+      "perMonth": "/ay",
+      "endsOn": "Bitiş",
+      "percentPaid": "%{percent} ödendi"
     }
   },
   "notifications": {
@@ -253,12 +430,25 @@
   },
   "settings": {
     "title": "Ayarlar",
+    "description": "Hesap ve uygulama ayarlarınız",
     "profile": "Profil Ayarları",
+    "profileDescription": "Hesap bilgilerinizi güncelleyin",
+    "namePlaceholder": "Adınız Soyadınız",
+    "nameDescription": "Bu isim profilinizde ve menüde görünecektir.",
     "preferences": "Tercihler",
     "notifications": "Bildirim Ayarları",
     "appearance": "Görünüm",
+    "appearanceComingSoon": "Yakında: Koyu/Açık tema ve renk tercihleri",
     "language": "Dil",
     "theme": "Tema",
+    "users": "Kullanıcılar",
+    "currency": "Para Birimi Tercihi",
+    "currencyDescription": "Yeni kayıtlar için varsayılan para biriminizi seçin",
+    "defaultCurrency": "Varsayılan Para Birimi",
+    "currencyHint": "Yeni varlık ve işlemler varsayılan olarak bu para birimini kullanacak",
+    "projectionDescription": "Finansal projeksiyon hesaplamalarında kullanılacak oranlar",
+    "inflationHint": "Giderlerinize uygulanacak yıllık artış oranı",
+    "salaryHint": "Gelirlerinize uygulanacak yıllık artış oranı",
     "themes": {
       "light": "Açık",
       "dark": "Koyu",
@@ -277,5 +467,118 @@
     "totalUsers": "Toplam Kullanıcı",
     "activeNow": "Şu An Aktif",
     "dailyActive": "Günlük Aktif Kullanıcı"
+  },
+  "calendar": {
+    "title": "Takvim",
+    "today": "Bugün",
+    "month": "Ay",
+    "week": "Hafta",
+    "day": "Gün",
+    "noEvents": "Bu gün için etkinlik yok",
+    "projectDeadline": "Proje Son Tarihi",
+    "taskDue": "Görev Son Tarihi",
+    "paymentDue": "Ödeme Tarihi",
+    "reminder": "Hatırlatma"
+  },
+  "timeTracking": {
+    "title": "Zaman Takibi",
+    "startTimer": "Zamanlayıcıyı Başlat",
+    "stopTimer": "Zamanlayıcıyı Durdur",
+    "activeTimer": "Aktif Zamanlayıcı",
+    "noActiveTimer": "Aktif zamanlayıcı yok",
+    "totalToday": "Bugün Toplam",
+    "thisWeek": "Bu Hafta",
+    "thisMonth": "Bu Ay",
+    "billable": "Faturalanabilir",
+    "nonBillable": "Faturalanmaz",
+    "hourlyRate": "Saatlik Ücret",
+    "duration": "Süre",
+    "manualEntry": "Manuel Giriş",
+    "selectProject": "Proje Seçin",
+    "selectTask": "Görev Seçin",
+    "description": "Açıklama",
+    "entries": "Zaman Kayıtları",
+    "noEntries": "Henüz zaman kaydı yok",
+    "hours": "saat",
+    "minutes": "dakika"
+  },
+  "reports": {
+    "title": "Raporlar",
+    "incomeReport": "Gelir Raporu",
+    "expenseReport": "Gider Raporu",
+    "projectReport": "Proje Raporu",
+    "clientReport": "Müşteri Raporu",
+    "timeReport": "Zaman Raporu",
+    "dateRange": "Tarih Aralığı",
+    "thisMonth": "Bu Ay",
+    "lastMonth": "Geçen Ay",
+    "thisQuarter": "Bu Çeyrek",
+    "thisYear": "Bu Yıl",
+    "custom": "Özel Aralık",
+    "export": "Dışa Aktar",
+    "exportPDF": "PDF Olarak İndir",
+    "exportCSV": "CSV Olarak İndir",
+    "exportExcel": "Excel Olarak İndir",
+    "totalIncome": "Toplam Gelir",
+    "totalExpense": "Toplam Gider",
+    "netProfit": "Net Kar",
+    "byCategory": "Kategoriye Göre",
+    "byClient": "Müşteriye Göre",
+    "byProject": "Projeye Göre",
+    "trend": "Trend"
+  },
+  "goals": {
+    "title": "Hedefler",
+    "createGoal": "Hedef Oluştur",
+    "editGoal": "Hedefi Düzenle",
+    "deleteGoal": "Hedefi Sil",
+    "activeGoals": "Aktif Hedefler",
+    "completedGoals": "Tamamlanan Hedefler",
+    "progress": "İlerleme",
+    "target": "Hedef",
+    "current": "Mevcut",
+    "deadline": "Son Tarih",
+    "daysLeft": "gün kaldı",
+    "completed": "Tamamlandı!",
+    "types": {
+      "income": "Gelir Hedefi",
+      "projects": "Proje Hedefi",
+      "clients": "Müşteri Hedefi",
+      "hours": "Saat Hedefi",
+      "savings": "Birikim Hedefi"
+    },
+    "periods": {
+      "weekly": "Haftalık",
+      "monthly": "Aylık",
+      "quarterly": "Çeyreklik",
+      "yearly": "Yıllık"
+    },
+    "noGoals": "Henüz hedef yok. İlk hedefinizi belirleyin!",
+    "congratulations": "Tebrikler! Hedefinize ulaştınız!"
+  },
+  "tags": {
+    "title": "Etiketler",
+    "createTag": "Etiket Oluştur",
+    "editTag": "Etiketi Düzenle",
+    "deleteTag": "Etiketi Sil",
+    "name": "Etiket Adı",
+    "color": "Renk",
+    "noTags": "Henüz etiket yok"
+  },
+  "pricing": {
+    "title": "Fiyatlandırma",
+    "hourlyRate": "Saatlik Ücret",
+    "projectRate": "Proje Ücreti",
+    "estimatedHours": "Tahmini Saat",
+    "actualHours": "Gerçekleşen Saat",
+    "totalEarnings": "Toplam Kazanç",
+    "pricingType": "Fiyatlandırma Türü",
+    "types": {
+      "fixed": "Sabit Fiyat",
+      "hourly": "Saatlik Ücret",
+      "milestone": "Aşama Bazlı"
+    },
+    "calculator": "Fiyat Hesaplayıcı",
+    "suggestedRate": "Önerilen Ücret"
   }
 }

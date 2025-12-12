@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useCreateRecurringItem, useUpdateRecurringItem } from '@/hooks/use-recurring-items'
+import { useTranslation } from '@/lib/i18n'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -42,16 +43,16 @@ interface RecurringItem {
   end_date: string | null
 }
 
-const recurringItemSchema = z.object({
-  name: z.string().min(2, 'İsim en az 2 karakter olmalı'),
+const createRecurringItemSchema = (t: (key: string) => string) => z.object({
+  name: z.string().min(2, t('projections.recurring.nameValidation')),
   type: z.enum(['income', 'expense']),
-  amount: z.number().positive('Tutar pozitif olmalı'),
+  amount: z.number().positive(t('projections.recurring.amountValidation')),
   frequency: z.enum(['monthly', 'yearly']),
-  start_date: z.string().min(1, 'Başlangıç tarihi zorunlu'),
+  start_date: z.string().min(1, t('projections.recurring.startDateRequired')),
   end_date: z.string().optional(),
 })
 
-type RecurringItemFormData = z.infer<typeof recurringItemSchema>
+type RecurringItemFormData = z.infer<ReturnType<typeof createRecurringItemSchema>>
 
 interface RecurringItemFormDialogProps {
   open: boolean
@@ -66,12 +67,15 @@ export function RecurringItemFormDialog({
   item,
   defaultType = 'income',
 }: RecurringItemFormDialogProps) {
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const createItem = useCreateRecurringItem()
   const updateItem = useUpdateRecurringItem()
   const isEditing = !!item
 
   const today = new Date().toISOString().split('T')[0]
+
+  const recurringItemSchema = createRecurringItemSchema(t)
 
   const form = useForm<RecurringItemFormData>({
     resolver: zodResolver(recurringItemSchema),
@@ -85,7 +89,7 @@ export function RecurringItemFormDialog({
     },
   })
 
-  // Form değerlerini item değiştiğinde güncelle
+  // Update form values when item changes
   if (item && form.getValues('name') !== item.name) {
     form.reset({
       name: item.name,
@@ -128,19 +132,17 @@ export function RecurringItemFormDialog({
     }
   }
 
-  const itemType = form.watch('type')
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? 'Tekrarlayan Kalem Düzenle' : 'Yeni Tekrarlayan Kalem'}
+            {isEditing ? t('projections.recurring.editTitle') : t('projections.recurring.addTitle')}
           </DialogTitle>
           <DialogDescription>
             {isEditing
-              ? 'Tekrarlayan gelir veya gider kalemini düzenleyin.'
-              : 'Maaş, kira gibi düzenli gelir veya gider ekleyin.'}
+              ? t('projections.recurring.editDescription')
+              : t('projections.recurring.addItemDescription')}
           </DialogDescription>
         </DialogHeader>
 
@@ -151,9 +153,9 @@ export function RecurringItemFormDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>İsim *</FormLabel>
+                  <FormLabel>{t('projections.recurring.name')} *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Örn: Maaş, Kira, Netflix" {...field} />
+                    <Input placeholder={t('projections.recurring.namePlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -166,16 +168,16 @@ export function RecurringItemFormDialog({
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tür *</FormLabel>
+                    <FormLabel>{t('projections.recurring.type')} *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Tür seçin" />
+                          <SelectValue placeholder={t('projections.recurring.selectType')} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="income">Gelir</SelectItem>
-                        <SelectItem value="expense">Gider</SelectItem>
+                        <SelectItem value="income">{t('transactions.income')}</SelectItem>
+                        <SelectItem value="expense">{t('transactions.expense')}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -188,16 +190,16 @@ export function RecurringItemFormDialog({
                 name="frequency"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Sıklık *</FormLabel>
+                    <FormLabel>{t('projections.recurring.frequency')} *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Sıklık seçin" />
+                          <SelectValue placeholder={t('projections.recurring.selectFrequency')} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="monthly">Aylık</SelectItem>
-                        <SelectItem value="yearly">Yıllık</SelectItem>
+                        <SelectItem value="monthly">{t('projections.frequency.monthly')}</SelectItem>
+                        <SelectItem value="yearly">{t('projections.frequency.yearly')}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -211,7 +213,7 @@ export function RecurringItemFormDialog({
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tutar (₺) *</FormLabel>
+                  <FormLabel>{t('projections.recurring.amount')} (₺) *</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -233,7 +235,7 @@ export function RecurringItemFormDialog({
                 name="start_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Başlangıç Tarihi *</FormLabel>
+                    <FormLabel>{t('projections.recurring.startDate')} *</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -247,7 +249,7 @@ export function RecurringItemFormDialog({
                 name="end_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bitiş Tarihi</FormLabel>
+                    <FormLabel>{t('projections.recurring.endDate')}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -263,10 +265,10 @@ export function RecurringItemFormDialog({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                İptal
+                {t('common.cancel')}
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? 'Kaydediliyor...' : isEditing ? 'Güncelle' : 'Ekle'}
+                {loading ? t('common.loading') : isEditing ? t('projections.recurring.update') : t('common.add')}
               </Button>
             </DialogFooter>
           </form>

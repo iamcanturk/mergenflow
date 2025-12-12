@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Send, Bell, Users, Search } from 'lucide-react'
+import { Send, Bell, Users, Search, Smartphone, Mail } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { useSendNotification } from '@/hooks/use-notifications'
@@ -39,13 +39,17 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
-import { useQuery } from '@tanstack/react-query'
+import { Switch } from '@/components/ui/switch'
+import { Badge } from '@/components/ui/badge'
+import { useQuery, useMutation } from '@tanstack/react-query'
 
 const notificationSchema = z.object({
   title: z.string().min(2, 'Başlık en az 2 karakter olmalı'),
   message: z.string().min(5, 'Mesaj en az 5 karakter olmalı'),
   type: z.enum(['info', 'warning', 'success', 'error', 'reminder']),
   link: z.string().optional(),
+  sendPush: z.boolean(),
+  sendInApp: z.boolean(),
 })
 
 type NotificationFormData = z.infer<typeof notificationSchema>
@@ -54,6 +58,7 @@ interface UserData {
   id: string
   full_name: string | null
   email: string | null
+  has_push?: boolean
 }
 
 export function AdminNotificationForm() {
@@ -62,16 +67,53 @@ export function AdminNotificationForm() {
   const [searchTerm, setSearchTerm] = useState('')
   const sendNotification = useSendNotification()
 
+  // Send push notifications mutation
+  const sendPushMutation = useMutation({
+    mutationFn: async ({ userIds, title, message, link }: { 
+      userIds: string[]
+      title: string
+      message: string
+      link?: string
+    }) => {
+      const response = await fetch('/api/admin/push', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userIds, title, message, link }),
+      })
+      
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Push notification gönderilemedi')
+      }
+      
+      return response.json()
+    },
+  })
+
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['admin-users-for-notifications'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Get users
+      const { data: profiles, error } = await supabase
         .from('profiles')
         .select('id, full_name, email')
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      return data as UserData[]
+
+      // Get push subscriptions to show who has push enabled
+      const { data: pushSubs } = await (supabase as any)
+        .from('push_subscriptions')
+        .select('user_id')
+      
+      const pushUserIds = new Set((pushSubs || []).map((s: any) => s.user_id))
+
+      return (profiles || []).map((p: any) => ({
+        id: p.id,
+        full_name: p.full_name,
+        email: p.email,
+        has_push: pushUserIds.has(p.id)
+      })) as UserData[]
     },
   })
 
@@ -82,6 +124,8 @@ export function AdminNotificationForm() {
       message: '',
       type: 'info',
       link: '',
+      sendPush: false,
+      sendInApp: true,
     },
   })
 
@@ -113,21 +157,65 @@ export function AdminNotificationForm() {
       return
     }
 
+    if (!data.sendInApp && !data.sendPush) {
+      toast.error('En az bir bildirim yöntemi seçmelisiniz')
+      return
+    }
+
     try {
-      // Her seçili kullanıcıya bildirim gönder
-      await Promise.all(
-        selectedUsers.map((userId) =>
-          sendNotification.mutateAsync({
-            user_id: userId,
+      const results = {
+        inApp: { success: 0, failed: 0 },
+        push: { success: 0, failed: 0, noSubscription: 0 },
+      }
+
+      // Send in-app notifications
+      if (data.sendInApp) {
+        const inAppResults = await Promise.allSettled(
+          selectedUsers.map((userId) =>
+            sendNotification.mutateAsync({
+              user_id: userId,
+              title: data.title,
+              message: data.message,
+              type: data.type,
+              link: data.link || undefined,
+            })
+          )
+        )
+        results.inApp.success = inAppResults.filter(r => r.status === 'fulfilled').length
+        results.inApp.failed = inAppResults.filter(r => r.status === 'rejected').length
+      }
+
+      // Send push notifications
+      if (data.sendPush) {
+        try {
+          const pushResult = await sendPushMutation.mutateAsync({
+            userIds: selectedUsers,
             title: data.title,
             message: data.message,
-            type: data.type,
-            link: data.link || undefined,
+            link: data.link,
           })
-        )
-      )
+          results.push.success = pushResult.sent || 0
+          results.push.failed = pushResult.failed || 0
+        } catch (error) {
+          console.error('Push notification error:', error)
+        }
+      }
 
-      toast.success(`${selectedUsers.length} kullanıcıya bildirim gönderildi`)
+      // Show results
+      const messages = []
+      if (data.sendInApp && results.inApp.success > 0) {
+        messages.push(`${results.inApp.success} uygulama içi bildirim`)
+      }
+      if (data.sendPush && results.push.success > 0) {
+        messages.push(`${results.push.success} push bildirim`)
+      }
+      
+      if (messages.length > 0) {
+        toast.success(`Gönderildi: ${messages.join(', ')}`)
+      } else {
+        toast.warning('Bildirim gönderilemedi')
+      }
+
       form.reset()
       setSelectedUsers([])
     } catch (error) {
@@ -226,13 +314,73 @@ export function AdminNotificationForm() {
                 )}
               />
 
+              {/* Notification Method Selection */}
+              <div className="space-y-4 rounded-lg border p-4">
+                <p className="text-sm font-medium">Bildirim Yöntemi</p>
+                
+                <FormField
+                  control={form.control}
+                  name="sendInApp"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <FormLabel className="flex items-center gap-2">
+                          <Mail className="h-4 w-4" />
+                          Uygulama İçi Bildirim
+                        </FormLabel>
+                        <FormDescription>
+                          Kullanıcı uygulamaya girdiğinde görür
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="sendPush"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <FormLabel className="flex items-center gap-2">
+                          <Smartphone className="h-4 w-4" />
+                          Push Bildirim
+                        </FormLabel>
+                        <FormDescription>
+                          Tarayıcı bildirimi olarak gönderilir
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                {form.watch('sendPush') && (
+                  <p className="text-xs text-muted-foreground">
+                    ℹ️ Push bildirim sadece bildirimleri etkinleştirmiş kullanıcılara gönderilir.
+                    Tabloda 📱 simgesi olan kullanıcılar push bildirim alabilir.
+                  </p>
+                )}
+              </div>
+
               <Button
                 type="submit"
                 className="w-full"
-                disabled={sendNotification.isPending || selectedUsers.length === 0}
+                disabled={sendNotification.isPending || sendPushMutation.isPending || selectedUsers.length === 0}
               >
                 <Send className="mr-2 h-4 w-4" />
-                {sendNotification.isPending
+                {(sendNotification.isPending || sendPushMutation.isPending)
                   ? 'Gönderiliyor...'
                   : `${selectedUsers.length} Kullanıcıya Gönder`}
               </Button>
@@ -278,18 +426,19 @@ export function AdminNotificationForm() {
                   </TableHead>
                   <TableHead>Kullanıcı</TableHead>
                   <TableHead>E-posta</TableHead>
+                  <TableHead className="w-16 text-center">Push</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={3} className="text-center py-8">
+                    <TableCell colSpan={4} className="text-center py-8">
                       Yükleniyor...
                     </TableCell>
                   </TableRow>
                 ) : filteredUsers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={3} className="text-center py-8">
+                    <TableCell colSpan={4} className="text-center py-8">
                       Kullanıcı bulunamadı
                     </TableCell>
                   </TableRow>
@@ -311,6 +460,15 @@ export function AdminNotificationForm() {
                       </TableCell>
                       <TableCell className="text-muted-foreground">
                         {user.email}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {user.has_push ? (
+                          <Badge variant="secondary" className="gap-1">
+                            <Smartphone className="h-3 w-3" />
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))
