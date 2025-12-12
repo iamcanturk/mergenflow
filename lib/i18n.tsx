@@ -57,9 +57,11 @@ const I18nContext = createContext<I18nContextType | null>(null);
 // Provider component
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(defaultLocale);
+  const [mounted, setMounted] = useState(false);
   
   // Load locale from localStorage on mount
   useEffect(() => {
+    setMounted(true);
     const savedLocale = localStorage.getItem('locale') as Locale;
     if (savedLocale && locales.includes(savedLocale)) {
       setLocaleState(savedLocale);
@@ -77,8 +79,18 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     return interpolate(translation, params);
   }, [locale]);
   
+  // Use default locale for SSR to avoid hydration mismatch
+  const contextValue = {
+    locale: mounted ? locale : defaultLocale,
+    setLocale,
+    t: mounted ? t : (key: string, params?: Record<string, string | number>) => {
+      const translation = getNestedValue(translations[defaultLocale], key);
+      return interpolate(translation, params);
+    },
+  };
+  
   return (
-    <I18nContext.Provider value={{ locale, setLocale, t }}>
+    <I18nContext.Provider value={contextValue}>
       {children}
     </I18nContext.Provider>
   );
