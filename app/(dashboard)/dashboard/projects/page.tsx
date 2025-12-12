@@ -1,6 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+'use client'
+
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ProjectsTable, ProjectFormDialog } from '@/components/projects'
 
 export default function ProjectsPage() {
+  const [formOpen, setFormOpen] = useState(false)
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -10,18 +17,19 @@ export default function ProjectsPage() {
             Projelerinizi yönetin
           </p>
         </div>
+        <Button onClick={() => setFormOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Yeni Proje
+        </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Proje Listesi</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Faz 5&apos;te proje listesi ve yönetimi eklenecek.
-          </p>
-        </CardContent>
-      </Card>
+      <ProjectsTable />
+
+      <ProjectFormDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        project={null}
+      />
     </div>
   )
 }
