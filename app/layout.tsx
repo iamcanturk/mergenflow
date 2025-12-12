@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://mf.iamcanturk.dev'),
   title: {
     default: "MergenFlow - Freelance & Finansal Özgürlük Platformu",
     template: "%s | MergenFlow",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    url: "https://mergenflow.com",
+    url: "https://mf.iamcanturk.dev",
     siteName: "MergenFlow",
     title: "MergenFlow - Freelance & Finansal Özgürlük Platformu",
     description: "Freelance projelerinizi yönetin, finansal hedeflerinize ulaşın.",
