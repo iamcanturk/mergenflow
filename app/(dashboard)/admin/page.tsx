@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Users, FolderKanban, Wallet, TrendingUp, ArrowLeft } from 'lucide-react'
+import { Users, FolderKanban, Wallet, TrendingUp, ArrowLeft, Bell } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -115,7 +115,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Admin Menü */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Link href="/admin/users">
           <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardHeader>
@@ -125,6 +125,20 @@ export default async function AdminDashboardPage() {
               </CardTitle>
               <CardDescription>
                 Kullanıcıları görüntüle, düzenle ve yönet
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
+
+        <Link href="/admin/notifications">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bell className="h-5 w-5" />
+                Bildirim Gönder
+              </CardTitle>
+              <CardDescription>
+                Kullanıcılara bildirim gönder
               </CardDescription>
             </CardHeader>
           </Card>

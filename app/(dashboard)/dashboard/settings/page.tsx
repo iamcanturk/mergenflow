@@ -7,8 +7,14 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/client'
 import { useUserSettings } from '@/hooks/use-projections'
 import { useUpdateUserSettings } from '@/hooks/use-recurring-items'
+import {
+  useNotificationRules,
+  useCreateNotificationRule,
+  useDeleteNotificationRule,
+  useToggleNotificationRule,
+} from '@/hooks/use-notifications'
 import { toast } from 'sonner'
-import { User, Settings2, Bell, Palette } from 'lucide-react'
+import { User, Settings2, Bell, Palette, Plus, Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -23,7 +29,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Switch } from '@/components/ui/switch'
 
 const profileSchema = z.object({
   full_name: z.string().min(2, 'İsim en az 2 karakter olmalı'),
@@ -224,18 +238,8 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Bildirim Ayarları (Placeholder) */}
-      <Card className="opacity-60">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Bell className="h-5 w-5" />
-            Bildirim Ayarları
-          </CardTitle>
-          <CardDescription>
-            Yakında: E-posta ve push bildirim tercihleri
-          </CardDescription>
-        </CardHeader>
-      </Card>
+      {/* Bildirim Kuralları */}
+      <NotificationRulesCard />
 
       {/* Tema Ayarları (Placeholder) */}
       <Card className="opacity-60">
@@ -250,5 +254,161 @@ export default function SettingsPage() {
         </CardHeader>
       </Card>
     </div>
+  )
+}
+
+const ruleTypeLabels: Record<string, string> = {
+  payment_due: 'Ödeme Vadesi',
+  task_due: 'Görev Teslimi',
+  project_deadline: 'Proje Deadline',
+}
+
+function NotificationRulesCard() {
+  const { data: rules = [], isLoading } = useNotificationRules()
+  const createRule = useCreateNotificationRule()
+  const deleteRule = useDeleteNotificationRule()
+  const toggleRule = useToggleNotificationRule()
+
+  const [showForm, setShowForm] = useState(false)
+  const [newRule, setNewRule] = useState({
+    name: '',
+    rule_type: 'payment_due' as 'payment_due' | 'task_due' | 'project_deadline',
+    days_before: 1,
+  })
+
+  const handleCreateRule = async () => {
+    if (!newRule.name) {
+      toast.error('Kural adı gerekli')
+      return
+    }
+
+    try {
+      await createRule.mutateAsync(newRule)
+      toast.success('Kural oluşturuldu')
+      setNewRule({ name: '', rule_type: 'payment_due', days_before: 1 })
+      setShowForm(false)
+    } catch (error) {
+      console.error('Failed to create rule:', error)
+      toast.error('Kural oluşturulamadı')
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5" />
+              Bildirim Kuralları
+            </CardTitle>
+            <CardDescription>
+              Otomatik hatırlatma bildirimleri
+            </CardDescription>
+          </div>
+          <Button size="sm" onClick={() => setShowForm(!showForm)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Yeni Kural
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {showForm && (
+          <div className="rounded-lg border bg-muted/50 p-4 space-y-4">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="space-y-2">
+                <Label>Kural Adı</Label>
+                <Input
+                  placeholder="Ör: Ödeme Hatırlatması"
+                  value={newRule.name}
+                  onChange={(e) => setNewRule({ ...newRule, name: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Kural Tipi</Label>
+                <Select
+                  value={newRule.rule_type}
+                  onValueChange={(value: 'payment_due' | 'task_due' | 'project_deadline') =>
+                    setNewRule({ ...newRule, rule_type: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="payment_due">Ödeme Vadesi</SelectItem>
+                    <SelectItem value="task_due">Görev Teslimi</SelectItem>
+                    <SelectItem value="project_deadline">Proje Deadline</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Kaç Gün Önce</Label>
+                <Input
+                  type="number"
+                  min="1"
+                  max="30"
+                  value={newRule.days_before}
+                  onChange={(e) =>
+                    setNewRule({ ...newRule, days_before: Number(e.target.value) })
+                  }
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={handleCreateRule} disabled={createRule.isPending}>
+                {createRule.isPending ? 'Kaydediliyor...' : 'Kaydet'}
+              </Button>
+              <Button variant="outline" onClick={() => setShowForm(false)}>
+                İptal
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {isLoading ? (
+          <div className="space-y-2">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+          </div>
+        ) : rules.length === 0 ? (
+          <p className="text-center text-muted-foreground py-4">
+            Henüz bildirim kuralı eklenmemiş
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {rules.map((rule) => (
+              <div
+                key={rule.id}
+                className="flex items-center justify-between rounded-lg border p-3"
+              >
+                <div className="flex items-center gap-4">
+                  <Switch
+                    checked={rule.is_active}
+                    onCheckedChange={(checked) =>
+                      toggleRule.mutate({ id: rule.id, is_active: checked })
+                    }
+                  />
+                  <div>
+                    <p className="font-medium">{rule.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {ruleTypeLabels[rule.rule_type]} - {rule.days_before} gün önce
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-destructive"
+                  onClick={() => deleteRule.mutate(rule.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   )
 }

@@ -1,65 +1,234 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { 
+  ArrowRight, 
+  BarChart3, 
+  Briefcase, 
+  CheckCircle2, 
+  CreditCard, 
+  Kanban, 
+  LineChart, 
+  Shield, 
+  Users,
+  Zap
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
-export default function Home() {
+const features = [
+  {
+    icon: Users,
+    title: 'Müşteri Yönetimi',
+    description: 'Tüm müşterilerinizi tek bir yerden yönetin. İletişim bilgileri, projeler ve ödemeler.',
+  },
+  {
+    icon: Briefcase,
+    title: 'Proje Takibi',
+    description: 'Projelerinizi tekliften teslime kadar takip edin. Deadline\'ler ve bütçeler kontrol altında.',
+  },
+  {
+    icon: Kanban,
+    title: 'Kanban Board',
+    description: 'Sürükle-bırak ile görevlerinizi organize edin. Scrum ve Kanban metodolojileri.',
+  },
+  {
+    icon: CreditCard,
+    title: 'Gelir & Gider',
+    description: 'Tüm finansal işlemlerinizi kaydedin. Hakedişler, faturalar ve ödemeler.',
+  },
+  {
+    icon: LineChart,
+    title: 'Finansal Projeksiyon',
+    description: '36 aya kadar finansal öngörü. Enflasyon ve gelir artışı hesaplamaları.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Varlık Yönetimi',
+    description: 'Nakit, altın, hisse ve kripto varlıklarınızı takip edin.',
+  },
+]
+
+const benefits = [
+  'Freelance işlerinizi profesyonelce yönetin',
+  'Finansal hedeflerinize ne zaman ulaşacağınızı görün',
+  'Müşteri ve proje verileriniz güvende',
+  'Mobil uyumlu, her yerden erişim',
+  'Türkçe arayüz ve TL desteği',
+  'Düzenli gelir/gider takibi ile bütçe planlaması',
+]
+
+export default function LandingPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-background">
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+              <Zap className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <span className="text-xl font-bold">MergenFlow</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/login">
+              <Button variant="ghost">Giriş Yap</Button>
+            </Link>
+            <Link href="/register">
+              <Button>
+                Ücretsiz Başla
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-24 text-center">
+        <div className="mx-auto max-w-3xl">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border bg-muted px-4 py-1.5 text-sm">
+            <Shield className="h-4 w-4 text-primary" />
+            <span>Verileriniz güvende, %100 gizli</span>
+          </div>
+          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+            Freelance İşlerinizi
+            <span className="block text-primary">Profesyonelce Yönetin</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mb-8 text-lg text-muted-foreground sm:text-xl">
+            Müşterilerinizi, projelerinizi ve finanslarınızı tek bir platformda yönetin.
+            Finansal özgürlüğe giden yolu görün.
           </p>
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/register">
+              <Button size="lg" className="w-full sm:w-auto">
+                Ücretsiz Hesap Oluştur
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                Demo İncele
+              </Button>
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Stats */}
+        <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-4">
+          {[
+            { label: 'Aktif Kullanıcı', value: '1,000+' },
+            { label: 'Yönetilen Proje', value: '5,000+' },
+            { label: 'İşlenen Tutar', value: '₺10M+' },
+            { label: 'Memnuniyet', value: '%99' },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="text-3xl font-bold text-primary">{stat.value}</div>
+              <div className="text-sm text-muted-foreground">{stat.label}</div>
+            </div>
+          ))}
         </div>
-      </main>
+      </section>
+
+      {/* Features Section */}
+      <section className="border-y bg-muted/50 py-24">
+        <div className="container mx-auto px-4">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
+              Tüm İhtiyaçlarınız Tek Platformda
+            </h2>
+            <p className="mx-auto max-w-2xl text-muted-foreground">
+              Freelance çalışanlar için özel olarak tasarlanmış, güçlü ve kullanımı kolay araçlar.
+            </p>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature) => (
+              <div
+                key={feature.title}
+                className="group rounded-xl border bg-card p-6 transition-all hover:shadow-lg"
+              >
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <feature.icon className="h-6 w-6" />
+                </div>
+                <h3 className="mb-2 text-xl font-semibold">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-24">
+        <div className="container mx-auto px-4">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <h2 className="mb-6 text-3xl font-bold sm:text-4xl">
+                Neden MergenFlow?
+              </h2>
+              <p className="mb-8 text-lg text-muted-foreground">
+                Freelance çalışanların en büyük sorunu finansal belirsizliktir. 
+                MergenFlow ile gelecekte nereye gideceğinizi görün ve hedeflerinize ulaşın.
+              </p>
+              <ul className="space-y-4">
+                {benefits.map((benefit) => (
+                  <li key={benefit} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                    <span>{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="relative">
+              <div className="aspect-square overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/20 to-primary/5 p-8">
+                <div className="flex h-full flex-col items-center justify-center text-center">
+                  <LineChart className="mb-4 h-16 w-16 text-primary" />
+                  <div className="text-4xl font-bold">36 Ay</div>
+                  <div className="text-muted-foreground">Finansal Projeksiyon</div>
+                  <div className="mt-4 text-sm text-muted-foreground">
+                    Enflasyon ve gelir artışı hesaplamalarıyla<br />
+                    geleceğinizi planlayın
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="border-t bg-muted/50 py-24">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
+            Hemen Başlayın
+          </h2>
+          <p className="mx-auto mb-8 max-w-xl text-muted-foreground">
+            Ücretsiz hesap oluşturun ve freelance kariyerinizi bir üst seviyeye taşıyın.
+            Kredi kartı gerekmez.
+          </p>
+          <Link href="/register">
+            <Button size="lg">
+              Ücretsiz Hesap Oluştur
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+                <Zap className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <span className="text-xl font-bold">MergenFlow</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © 2025 MergenFlow. Tüm hakları saklıdır.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
-  );
+  )
 }

@@ -13,6 +13,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { UserNav } from './user-nav'
+import { NotificationDropdown } from '@/components/notifications/notification-dropdown'
 
 const breadcrumbLabels: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -22,6 +23,10 @@ const breadcrumbLabels: Record<string, string> = {
   assets: 'Varlıklar',
   projections: 'Projeksiyon',
   settings: 'Ayarlar',
+  admin: 'Admin',
+  users: 'Kullanıcılar',
+  notifications: 'Bildirimler',
+  kanban: 'Kanban',
 }
 
 export function AppHeader() {
@@ -58,7 +63,10 @@ export function AppHeader() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <UserNav />
+      <div className="flex items-center gap-2">
+        <NotificationDropdown />
+        <UserNav />
+      </div>
     </header>
   )
 }
