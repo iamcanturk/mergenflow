@@ -166,8 +166,8 @@ export function useSendTestNotification() {
       const registration = await navigator.serviceWorker.ready
       await registration.showNotification('MergenFlow Test', {
         body: 'Bildirimler düzgün çalışıyor! 🎉',
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
+        icon: '/icon.svg',
+        badge: '/icon.svg',
         tag: 'test-notification',
         requireInteraction: false,
       })
