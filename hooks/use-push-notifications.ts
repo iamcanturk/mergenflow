@@ -31,17 +31,22 @@ export function useSubscribePush() {
 
   return useMutation({
     mutationFn: async () => {
+      console.log('[Push] Starting subscription...')
+      
       // Request notification permission
       const permission = await Notification.requestPermission()
+      console.log('[Push] Permission:', permission)
       if (permission !== 'granted') {
         throw new Error('Bildirim izni reddedildi')
       }
 
       // Register service worker if not already registered
       const registration = await navigator.serviceWorker.ready
+      console.log('[Push] Service worker ready')
 
       // Get VAPID public key from environment
       const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+      console.log('[Push] VAPID key exists:', !!vapidPublicKey)
       if (!vapidPublicKey) {
         throw new Error('VAPID key not configured')
       }
@@ -51,14 +56,16 @@ export function useSubscribePush() {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as BufferSource,
       })
+      console.log('[Push] Got subscription:', subscription.endpoint)
 
       const subscriptionJson = subscription.toJSON()
       
       // Save subscription to database
       const { data: { user } } = await supabase.auth.getUser()
+      console.log('[Push] User:', user?.id)
       if (!user) throw new Error('Kullanıcı bulunamadı')
 
-      const { error } = await (supabase as any)
+      const { data, error } = await (supabase as any)
         .from('push_subscriptions')
         .upsert({
           user_id: user.id,
@@ -68,7 +75,9 @@ export function useSubscribePush() {
         }, {
           onConflict: 'user_id,endpoint'
         })
+        .select()
 
+      console.log('[Push] Upsert result:', data, 'Error:', error)
       if (error) throw error
 
       return subscription

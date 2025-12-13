@@ -116,15 +116,18 @@ export function AppSidebar() {
   useEffect(() => {
     async function checkAdmin() {
       const { data: { user } } = await supabase.auth.getUser()
+      console.log('[Sidebar] User:', user?.id, user?.email)
       if (!user) return
 
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', user.id)
         .single()
 
+      console.log('[Sidebar] Profile:', profile, 'Error:', error)
       const profileData = profile as { role: string } | null
+      console.log('[Sidebar] Role:', profileData?.role, 'isAdmin:', profileData?.role === 'admin')
       setIsAdmin(profileData?.role === 'admin')
     }
 
