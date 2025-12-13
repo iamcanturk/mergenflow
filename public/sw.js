@@ -30,8 +30,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body || 'Yeni bildirim',
-    icon: '/icon-192.png',
-    badge: '/icon-192.png',
+    icon: '/icon.svg',
+    badge: '/icon.svg',
     tag: data.tag || 'default',
     data: {
       url: data.url || '/dashboard',
