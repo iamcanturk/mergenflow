@@ -13,6 +13,13 @@ import {
   useDeleteNotificationRule,
   useToggleNotificationRule,
 } from '@/hooks/use-notifications'
+import {
+  usePushSupport,
+  usePushPermission,
+  useSubscribePush,
+  useUnsubscribePush,
+  usePushSubscription,
+} from '@/hooks/use-push-notifications'
 import { useTranslation } from '@/lib/i18n'
 import { CURRENCIES } from '@/lib/constants'
 import { toast } from 'sonner'
@@ -466,66 +473,33 @@ function NotificationRulesCard() {
 }
 
 function PushNotificationsCard() {
-  const [isSupported, setIsSupported] = useState(false)
-  const [permission, setPermission] = useState<NotificationPermission>('default')
-  const [isSubscribed, setIsSubscribed] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const { isSupported } = usePushSupport()
+  const { permission } = usePushPermission()
+  const { data: subscription, isLoading: checkingSubscription } = usePushSubscription()
+  const subscribeMutation = useSubscribePush()
+  const unsubscribeMutation = useUnsubscribePush()
 
+  const isSubscribed = !!subscription
+  const loading = subscribeMutation.isPending || unsubscribeMutation.isPending || checkingSubscription
+
+  // Register service worker on mount
   useEffect(() => {
-    // Check if push notifications are supported
-    const supported = 'serviceWorker' in navigator && 
-      'PushManager' in window &&
-      'Notification' in window
-    
-    setIsSupported(supported)
-
-    if (supported) {
-      setPermission(Notification.permission)
-      
-      // Check subscription status
-      navigator.serviceWorker.ready.then(async (registration) => {
-        const subscription = await registration.pushManager.getSubscription()
-        setIsSubscribed(!!subscription)
-      })
+    if (isSupported && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(console.error)
     }
-  }, [])
+  }, [isSupported])
 
   const handleToggle = async (enabled: boolean) => {
     if (!isSupported) return
     
-    setLoading(true)
-    
     try {
       if (enabled) {
-        // Request permission and subscribe
-        const permission = await Notification.requestPermission()
-        setPermission(permission)
-        
-        if (permission === 'granted') {
-          // Register service worker
-          await navigator.serviceWorker.register('/sw.js')
-          
-          // For now, just show local notifications (no server push)
-          setIsSubscribed(true)
-          toast.success('Bildirimler etkinleştirildi')
-        } else {
-          toast.error('Bildirim izni reddedildi')
-        }
+        await subscribeMutation.mutateAsync()
       } else {
-        // Unsubscribe
-        const registration = await navigator.serviceWorker.ready
-        const subscription = await registration.pushManager.getSubscription()
-        if (subscription) {
-          await subscription.unsubscribe()
-        }
-        setIsSubscribed(false)
-        toast.success('Bildirimler devre dışı bırakıldı')
+        await unsubscribeMutation.mutateAsync()
       }
     } catch (error) {
       console.error('Push notification error:', error)
-      toast.error('Bir hata oluştu')
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -539,8 +513,8 @@ function PushNotificationsCard() {
       const registration = await navigator.serviceWorker.ready
       await registration.showNotification('MergenFlow Test', {
         body: 'Bildirimler düzgün çalışıyor! 🎉',
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
+        icon: '/icon.svg',
+        badge: '/icon.svg',
         tag: 'test-notification',
       })
       toast.success('Test bildirimi gönderildi')
